@@ -1,0 +1,49 @@
+﻿<Window x:Class="Executioner.CommandEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Executioner"
+        mc:Ignorable="d"
+        Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="False" SizeToContent="WidthAndHeight">
+    <Grid Margin="0,0,10,0" >
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="0,5,0,0"/>
+            </Style>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="Margin" Value="0,5,0,0"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="100"/>
+            <ColumnDefinition Width="3*" MinWidth="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50px" />
+            <RowDefinition Height="50px" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Margin="0">Name:</Label>
+        <TextBox x:Name="NameInputTextBox" Margin="0" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TextWrapping="NoWrap" Text="Name"/>
+        <Label Grid.Column="0" Grid.Row="1">Beschreibung:</Label>
+        <TextBox x:Name="DescInputTextBox" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="Beschreibung"/>
+        <Label Grid.Column="0" Grid.Row="2">Template:</Label>
+        <TextBox x:Name="TemplateInputTextBox" Grid.Column="1" Grid.Row="2" TextWrapping="Wrap"/>
+        <Label Grid.Column="0" Grid.Row="3">Wait for result:</Label>
+        <CheckBox x:Name="WaitForResultCheckBox" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Margin="10,0,0,0"></CheckBox>
+        <Label Grid.Column="0" Grid.Row="4">Type:</Label>
+        <ComboBox x:Name="TypeComboBox" Grid.Column="1" Grid.Row="4" >
+            <ComboBoxItem Content="Windows Bash"/>
+            <ComboBoxItem Content="Powershell"/>
+            <ComboBoxItem Content="Shell"/>
+        </ComboBox>
+        <WrapPanel Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="10">
+            <Button IsDefault="True" Width="80" Margin="0,0,10,0" Click="OnOKButtonClick" >OK</Button>
+            <Button IsCancel="True" Width="80" Click="OnCancelButtonClick" >Abbrechen</Button>
+        </WrapPanel>
+    </Grid>
+</Window>

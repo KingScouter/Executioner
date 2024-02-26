@@ -8,23 +8,26 @@ namespace Executioner
     /// </summary>
     public partial class MainWindow : Window
     {
+        private List<CommandData> commands = [];
+        private int commandIdx = 0;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            List<CommandData> commands = [
-                new CommandData(1, "Title1", "Desc1", "echo Test", true, "", ShellType.Cmd),
-                new CommandData(2, "Title2", "Desc2", "echo Wait for me", true, "", ShellType.Cmd),
-                new CommandData(3, "Title3", "Desc3", "dir", true, "", ShellType.Cmd),
-                new CommandData(4, "Powershell test1", "Test mit PWS", "ls", true, "", ShellType.Powershell)
-            ];
+            AddCommand("Title1", "Desc1", "echo Test", true, "", ShellType.Cmd);
+            AddCommand("Title2", "Desc2", "echo Wait for me", true, "", ShellType.Cmd);
+            AddCommand("Title3", "Desc3", "dir", true, "", ShellType.Cmd);
+            AddCommand("Powershell test1", "Test mit PWS", "ls", true, "", ShellType.Powershell);
 
-            FillDataGrid(commands);
+            CommandsDataGrid.ItemsSource = commands;
+
+            FillDataGrid();
         }
 
-        private void FillDataGrid(List<CommandData> commands)
+        private void FillDataGrid()
         {
-            CommandsDataGrid.ItemsSource = commands;
+            CommandsDataGrid.Items.Refresh();
         }
 
         private void ExecuteCommand(object sender, RoutedEventArgs e)
@@ -90,6 +93,38 @@ namespace Executioner
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             process.StartInfo = startInfo;
             process.Start();
+        }
+
+        private void AddButtonClick(object sender, RoutedEventArgs e)
+        {
+            //AddCommand($"TestNeu{commandIdx}", "Another test", "echo hello", true, "", ShellType.Cmd);
+            //FillDataGrid();
+            CommandEditWindow editWindow = new CommandEditWindow();
+            if (editWindow.ShowDialog() == true)
+            {
+                AddCommand(editWindow.OutputData);
+                FillDataGrid();
+            }
+        }
+
+        private void DeleteButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (commands.Count > 0)
+            {
+                commands.RemoveAt(commands.Count - 1);
+                FillDataGrid();
+            }
+        }
+
+        private void AddCommand(string name, string desc, string template, bool waitForResult, string workingDir, ShellType type)
+        {
+            commands.Add(new CommandData(commandIdx++, name, desc, template, waitForResult, workingDir, type));
+        }
+
+        private void AddCommand(CommandData command)
+        {
+            command.Id = commandIdx++;
+            commands.Add(command);
         }
     }
 }

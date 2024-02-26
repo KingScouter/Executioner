@@ -1,6 +1,6 @@
 ﻿namespace Executioner
 {
-    enum ShellType
+    public enum ShellType
     {
         Cmd,
         Powershell

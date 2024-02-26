@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Executioner
 {
-    class CommandData
+    public class CommandData
     {
         public int Id { get; set; }
         public string Name { get; set; }
