@@ -1,5 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.IO;
+using System.Text.Json;
 
 namespace Executioner
 {
@@ -97,8 +100,6 @@ namespace Executioner
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
         {
-            //AddCommand($"TestNeu{commandIdx}", "Another test", "echo hello", true, "", ShellType.Cmd);
-            //FillDataGrid();
             CommandEditWindow editWindow = new CommandEditWindow();
             if (editWindow.ShowDialog() == true)
             {
@@ -125,6 +126,52 @@ namespace Executioner
         {
             command.Id = commandIdx++;
             commands.Add(command);
+        }
+
+        private void CommonCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                StreamWriter sw = new StreamWriter("SampleData_Export.txt");
+                sw.Write(JsonSerializer.Serialize(commands));
+                sw.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void LoadMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                commands.Clear();
+
+                StreamReader sr = new StreamReader("SampleData_Import.txt");
+                string dataLine = sr.ReadToEnd();
+                if (dataLine != null)
+                {
+                    List<CommandData>? parsedCommands = JsonSerializer.Deserialize<List<CommandData>>(dataLine);
+                    if (parsedCommands != null)
+                    {
+                        commands.Clear();
+                        commands.AddRange(parsedCommands);
+                        FillDataGrid();
+                    }
+                }
+
+                sr.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
