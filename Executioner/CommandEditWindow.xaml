@@ -6,13 +6,18 @@
         xmlns:local="clr-namespace:Executioner"
         mc:Ignorable="d"
         Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="False" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="5,2"/>
+        </Style>
+    </Window.Resources>
     <Grid Margin="0,0,10,0" >
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="0,5,0,0"/>
+                <Setter Property="Margin" Value="0,0,0,5"/>
             </Style>
             <Style TargetType="{x:Type Label}">
-                <Setter Property="Margin" Value="0,5,0,0"/>
+                <Setter Property="Margin" Value="0,0,0,5"/>
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -27,16 +32,16 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.Row="0" Margin="0">Name:</Label>
-        <TextBox x:Name="NameInputTextBox" Margin="0" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TextWrapping="NoWrap" Text="Name"/>
-        <Label Grid.Column="0" Grid.Row="1">Beschreibung:</Label>
-        <TextBox x:Name="DescInputTextBox" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" Text="Beschreibung"/>
-        <Label Grid.Column="0" Grid.Row="2">Template:</Label>
+        <Label Grid.Column="0" Grid.Row="0" Margin="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
+        <TextBox x:Name="NameInputTextBox" Margin="0" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TextWrapping="NoWrap" />
+        <Label Grid.Column="0" Grid.Row="1" Target="{Binding ElementName=DescInputTextBox}">Beschreibung:</Label>
+        <TextBox x:Name="DescInputTextBox" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" />
+        <Label Grid.Column="0" Grid.Row="2" Target="{Binding ElementName=TemplateInputTextBox}">Template:</Label>
         <TextBox x:Name="TemplateInputTextBox" Grid.Column="1" Grid.Row="2" TextWrapping="Wrap"/>
-        <Label Grid.Column="0" Grid.Row="3">Wait for result:</Label>
-        <CheckBox x:Name="WaitForResultCheckBox" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Margin="10,0,0,0"></CheckBox>
-        <Label Grid.Column="0" Grid.Row="4">Type:</Label>
-        <ComboBox x:Name="TypeComboBox" Grid.Column="1" Grid.Row="4" >
+        <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=WaitForResultCheckBox}" VerticalAlignment="Center">Wait for result:</Label>
+        <CheckBox x:Name="WaitForResultCheckBox" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
+        <Label Grid.Column="0" Grid.Row="4" Target="{Binding ElementName=TypeComboBox}">Type:</Label>
+        <ComboBox x:Name="TypeComboBox" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" >
             <ComboBoxItem Content="Windows Bash"/>
             <ComboBoxItem Content="Powershell"/>
             <ComboBoxItem Content="Shell"/>
