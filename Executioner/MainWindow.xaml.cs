@@ -16,18 +16,15 @@ namespace Executioner
         private List<CommandData> commands = [];
         private int commandIdx = 0;
 
-        public MainWindow()
+        public MainWindow(string? filename)
         {
             InitializeComponent();
 
-            AddCommand("Title1", "Desc1", "echo Test", true, "", ShellType.Cmd);
-            AddCommand("Title2", "Desc2", "echo Wait for me", true, "", ShellType.Cmd);
-            AddCommand("Title3", "Desc3", "dir", true, "", ShellType.Cmd);
-            AddCommand("Powershell test1", "Test mit PWS", "ls", true, "", ShellType.Powershell);
-
             CommandsDataGrid.ItemsSource = commands;
-
             FillDataGrid();
+
+            if (filename != null)
+                LoadProject(filename);
         }
 
         private void FillDataGrid()
@@ -187,32 +184,34 @@ namespace Executioner
 
         private void LoadMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Executioner Project (*.json)|*.json";
+            if (openFileDialog.ShowDialog() == true)
+                LoadProject(openFileDialog.FileName);
+
+        }
+
+        private void LoadProject(string filename)
+        {
             try
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Executioner Project (*.json)|*.json";
-                if (openFileDialog.ShowDialog() == true)
+                commands.Clear();
+
+                StreamReader sr = new StreamReader(filename);
+                string dataLine = sr.ReadToEnd();
+                if (dataLine != null)
                 {
-                    commands.Clear();
-
-                    StreamReader sr = new StreamReader(openFileDialog.FileName);
-                    string dataLine = sr.ReadToEnd();
-                    if (dataLine != null)
+                    List<CommandData>? parsedCommands = JsonSerializer.Deserialize<List<CommandData>>(dataLine);
+                    if (parsedCommands != null)
                     {
-                        List<CommandData>? parsedCommands = JsonSerializer.Deserialize<List<CommandData>>(dataLine);
-                        if (parsedCommands != null)
-                        {
-                            commands.Clear();
-                            commands.AddRange(parsedCommands);
-                            FillDataGrid();
-                            StatusBarTextBox.Text = $"Loaded project from {openFileDialog.FileName}";
-                        }
+                        commands.Clear();
+                        commands.AddRange(parsedCommands);
+                        FillDataGrid();
+                        StatusBarTextBox.Text = $"Loaded project from {filename}";
                     }
-
-                    sr.Close();
                 }
 
-                
+                sr.Close();
             }
             catch (Exception ex)
             {
