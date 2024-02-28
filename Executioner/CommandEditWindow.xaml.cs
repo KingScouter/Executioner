@@ -20,28 +20,54 @@ namespace Executioner
     /// </summary>
     public partial class CommandEditWindow : Window
     {
-        public CommandData OutputData { get; set; }
+        private int commandId = 0;
+
+        private ShellType SelectedType = ShellType.Cmd;
+        public ShellType SelectedTypeProperty
+        {
+            get { return SelectedType; }
+            set { ; }
+        }
+
+        public static Dictionary<ShellType, string> NameMapping 
+        {
+            get { return ShellTypeConverter.NameMapping; }
+        }
 
         public CommandEditWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
+        }
+
+        public CommandEditWindow(CommandData inputData)
+        {
+            InitializeComponent();
+            this.DataContext = this;
+
+            commandId = inputData.Id;
+            NameInputTextBox.Text = inputData.Name;
+            DescInputTextBox.Text = inputData.Description;
+            TemplateInputTextBox.Text = inputData.Template;
+            WaitForResultCheckBox.IsChecked = inputData.WaitForResult;
+            SelectedType = inputData.Type;
         }
 
         public void OnOKButtonClick(object sender, RoutedEventArgs e)
         {
-            ShellType type = (ShellType)TypeComboBox.SelectedIndex;
-
-            OutputData = new CommandData(0, NameInputTextBox.Text, DescInputTextBox.Text, 
-                TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, "",
-                type);
             DialogResult = true;
-            Close();
         }
 
-        public void OnCancelButtonClick(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
+        public CommandData OutputData 
+        { 
+            get 
+            {
+                ShellType type = (ShellType)TypeComboBox.SelectedIndex;
+
+                return new CommandData(commandId, NameInputTextBox.Text, DescInputTextBox.Text,
+                    TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, "",
+                    type);
+            } 
         }
     }
 }

@@ -5,50 +5,65 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Executioner"
         mc:Ignorable="d"
-        Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="False" SizeToContent="WidthAndHeight">
+        Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="False" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="5,2"/>
         </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="MinWidth" Value="300"/>
+        </Style>
+        <Style x:Key="MultiLineTextBox" TargetType="{x:Type Control}">
+            <Setter Property="Height" Value="50" />
+            <Setter Property="MinWidth" Value="300"/>
+        </Style>
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="MinWidth" Value="300"/>
+        </Style>
+        <Style TargetType="{x:Type WrapPanel}">
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Width" Value="120"/>
+        </Style>
     </Window.Resources>
-    <Grid Margin="0,0,10,0" >
-        <Grid.Resources>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="0,0,0,5"/>
-            </Style>
-            <Style TargetType="{x:Type Label}">
-                <Setter Property="Margin" Value="0,0,0,5"/>
-            </Style>
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="100"/>
-            <ColumnDefinition Width="3*" MinWidth="300"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="50px" />
-            <RowDefinition Height="50px" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.Row="0" Margin="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
-        <TextBox x:Name="NameInputTextBox" Margin="0" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" TextWrapping="NoWrap" />
-        <Label Grid.Column="0" Grid.Row="1" Target="{Binding ElementName=DescInputTextBox}">Beschreibung:</Label>
-        <TextBox x:Name="DescInputTextBox" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" />
-        <Label Grid.Column="0" Grid.Row="2" Target="{Binding ElementName=TemplateInputTextBox}">Template:</Label>
-        <TextBox x:Name="TemplateInputTextBox" Grid.Column="1" Grid.Row="2" TextWrapping="Wrap"/>
-        <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=WaitForResultCheckBox}" VerticalAlignment="Center">Wait for result:</Label>
-        <CheckBox x:Name="WaitForResultCheckBox" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
-        <Label Grid.Column="0" Grid.Row="4" Target="{Binding ElementName=TypeComboBox}">Type:</Label>
-        <ComboBox x:Name="TypeComboBox" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" >
-            <ComboBoxItem Content="Windows Bash"/>
-            <ComboBoxItem Content="Powershell"/>
-            <ComboBoxItem Content="Shell"/>
-        </ComboBox>
-        <WrapPanel Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="10">
+    <DockPanel Margin="5">
+        <StackPanel DockPanel.Dock="Top">
+            <WrapPanel>
+                <Label Margin="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
+                <TextBox x:Name="NameInputTextBox" HorizontalAlignment="Stretch"  TextWrapping="NoWrap" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label Target="{Binding ElementName=DescInputTextBox}">Beschreibung:</Label>
+                <TextBox x:Name="DescInputTextBox" TextWrapping="Wrap" Style="{StaticResource MultiLineTextBox}" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label Target="{Binding ElementName=TemplateInputTextBox}">Template:</Label>
+                <TextBox x:Name="TemplateInputTextBox" TextWrapping="Wrap" Style="{StaticResource MultiLineTextBox}" />
+            </WrapPanel>
+            <WrapPanel>
+                <Label Target="{Binding ElementName=WaitForResultCheckBox}" VerticalAlignment="Center">Wait for result:</Label>
+                <CheckBox x:Name="WaitForResultCheckBox" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Target="{Binding ElementName=WorkingDirTextBox}" VerticalAlignment="Center">Working Directory:</Label>
+                <TextBox x:Name="WorkingDirTextBox" TextWrapping="NoWrap"></TextBox>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Target="{Binding ElementName=TypeComboBox}">Type:</Label>
+                <ComboBox x:Name="TypeComboBox" 
+                          VerticalAlignment="Center" 
+                          ItemsSource="{Binding NameMapping}"
+                          DisplayMemberPath="Value"
+                          SelectedValuePath="Key"
+                          SelectedValue="{Binding SelectedTypeProperty, Mode=TwoWay}" />
+
+            </WrapPanel>
+        </StackPanel>
+        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,5,0,5">
             <Button IsDefault="True" Width="80" Margin="0,0,10,0" Click="OnOKButtonClick" >OK</Button>
-            <Button IsCancel="True" Width="80" Click="OnCancelButtonClick" >Abbrechen</Button>
+            <Button IsCancel="True" Width="80" >Abbrechen</Button>
         </WrapPanel>
-    </Grid>
+    </DockPanel>
 </Window>
