@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Executioner"
-        x:Class="Executioner.MainWindow"
         xmlns:Collections="clr-namespace:System.Collections;assembly=System.Collections.NonGeneric"
+        xmlns:Primitives="clr-namespace:System.Windows.Controls.Ribbon.Primitives;assembly=System.Windows.Controls.Ribbon"
+        x:Class="Executioner.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
+        <local:ShellTypeConverter x:Key="ShellTypeConverter" />
         <Style TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="5,2"/>
         </Style>
@@ -23,7 +25,12 @@
                 <MenuItem Header="_Exit" />
             </MenuItem>
         </Menu>
-        <Grid DockPanel.Dock="Right">
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="StatusBarTextBox" />
+            </StatusBarItem>
+        </StatusBar>
+        <Grid DockPanel.Dock="Left">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="Auto"/>
@@ -33,19 +40,23 @@
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                     <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
                     <DataGridTextColumn Header="Template" Binding="{Binding Template}" Width="*"/>
-                    <DataGridTemplateColumn Header="Action" Width="Auto">
+                    <DataGridTextColumn Header="Working Directory" Binding="{Binding WorkingDir}" Width="*"/>
+                    <DataGridTextColumn Header="Shell Type" Binding="{Binding Type, Converter={StaticResource ShellTypeConverter}}" Width="*"/>
+                    <DataGridTemplateColumn Header="Action" Width="Auto" CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Click="ExecuteCommand" Content="Execute">
-                                </Button>
+                                <WrapPanel>
+                                    <Button Click="ExecuteCommand" Content="Execute"/>
+                                    <Button Click="EditCommand" Content="Edit"/>
+                                </WrapPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <WrapPanel Grid.Row="1" Margin="10" HorizontalAlignment="Right" >
-                <Button Click="AddButtonClick" IsDefault="True" MinWidth="80" Margin="0,0,10,0">Add</Button>
-                <Button Click="DeleteButtonClick" MinWidth="80">Delete</Button>
+                <Button Click="AddButtonClick" IsDefault="True" MinWidth="80" Margin="0,0,10,0" Content="Add"/>
+                <Button Click="DeleteButtonClick" MinWidth="80" Content="Delete"/>
             </WrapPanel>
         </Grid>
     </DockPanel>

@@ -58,6 +58,36 @@ namespace Executioner
             }
         }
 
+        private void EditCommand(object sender, RoutedEventArgs e)
+        {
+            object context = (sender as Button)!.DataContext;
+            if (context is not null && context is CommandData)
+            {
+                CommandData data = (context as CommandData)!;
+                try
+                {
+                    CommandEditWindow editWindow = new CommandEditWindow(data);
+                    if (editWindow.ShowDialog() == true)
+                    {
+                        CommandData newData = editWindow.OutputData!;
+                        int commandIdx = commands.FindIndex(elem => elem.Id == data.Id);
+                        if (commandIdx != -1)
+                        {
+                            commands.RemoveAt(commandIdx);
+                            commands.Insert(commandIdx, newData);
+                            StatusBarTextBox.Text = $"Updated command at index {commandIdx}";
+                            FillDataGrid();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
+
+            }
+        }
+
         private void ExecuteCmdCommand(string commandTemplate, Boolean waitForResult, string workingDir)
         {
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
