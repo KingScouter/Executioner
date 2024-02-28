@@ -12,7 +12,7 @@ namespace Executioner
         public string Name { get; set; }
         public string Description { get; set; }
         public string Template { get; set; }
-        public Boolean WaitForResult { get; set; }
+        public bool WaitForResult { get; set; }
         public string WorkingDir { get; set; }
         public ShellType Type { get; set; }
 

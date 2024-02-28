@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Win32;
+using System.Windows.Data;
 
 namespace Executioner
 {
@@ -167,9 +169,15 @@ namespace Executioner
         {
             try
             {
-                StreamWriter sw = new StreamWriter("SampleData_Export.txt");
-                sw.Write(JsonSerializer.Serialize(commands));
-                sw.Close();
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Executioner Project (*.json)|*.json";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    StreamWriter sw = new StreamWriter(saveFileDialog.FileName);
+                    sw.Write(JsonSerializer.Serialize(commands));
+                    sw.Close();
+                    StatusBarTextBox.Text = $"Saved project to {saveFileDialog.FileName}";
+                }
             }
             catch (Exception ex)
             {
@@ -181,22 +189,30 @@ namespace Executioner
         {
             try
             {
-                commands.Clear();
-
-                StreamReader sr = new StreamReader("SampleData_Import.txt");
-                string dataLine = sr.ReadToEnd();
-                if (dataLine != null)
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Executioner Project (*.json)|*.json";
+                if (openFileDialog.ShowDialog() == true)
                 {
-                    List<CommandData>? parsedCommands = JsonSerializer.Deserialize<List<CommandData>>(dataLine);
-                    if (parsedCommands != null)
+                    commands.Clear();
+
+                    StreamReader sr = new StreamReader(openFileDialog.FileName);
+                    string dataLine = sr.ReadToEnd();
+                    if (dataLine != null)
                     {
-                        commands.Clear();
-                        commands.AddRange(parsedCommands);
-                        FillDataGrid();
+                        List<CommandData>? parsedCommands = JsonSerializer.Deserialize<List<CommandData>>(dataLine);
+                        if (parsedCommands != null)
+                        {
+                            commands.Clear();
+                            commands.AddRange(parsedCommands);
+                            FillDataGrid();
+                            StatusBarTextBox.Text = $"Loaded project from {openFileDialog.FileName}";
+                        }
                     }
+
+                    sr.Close();
                 }
 
-                sr.Close();
+                
             }
             catch (Exception ex)
             {
