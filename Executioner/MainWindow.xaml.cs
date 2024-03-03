@@ -4,7 +4,6 @@ using System.Windows.Input;
 using System.IO;
 using System.Text.Json;
 using Microsoft.Win32;
-using System.Windows.Data;
 
 namespace Executioner
 {
