@@ -1,6 +1,6 @@
 ﻿using System.Windows.Data;
 
-namespace Executioner
+namespace Executioner.Models
 {
     public enum ShellType
     {

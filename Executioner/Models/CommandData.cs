@@ -1,4 +1,4 @@
-﻿namespace Executioner
+﻿namespace Executioner.Models
 {
     public class CommandData
     {

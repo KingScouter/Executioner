@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using Executioner.Models;
+using Microsoft.Win32;
 
 namespace Executioner
 {

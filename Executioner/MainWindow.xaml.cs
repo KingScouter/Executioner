@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.IO;
 using System.Text.Json;
 using Microsoft.Win32;
+using Executioner.Models;
 
 namespace Executioner
 {
@@ -143,11 +144,6 @@ namespace Executioner
                 commands.RemoveAt(commands.Count - 1);
                 FillDataGrid();
             }
-        }
-
-        private void AddCommand(string name, string desc, string template, bool waitForResult, string workingDir, ShellType type)
-        {
-            commands.Add(new CommandData(commandIdx++, name, desc, template, waitForResult, workingDir, type));
         }
 
         private void AddCommand(CommandData command)
