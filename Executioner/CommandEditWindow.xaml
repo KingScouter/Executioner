@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Executioner"
         mc:Ignorable="d"
-        Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="False" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+        Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Padding" Value="5,2"/>
@@ -26,6 +26,15 @@
         </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Width" Value="120"/>
+        </Style>
+        <Style x:Key="FileChooser" TargetType="WrapPanel">
+            <Setter Property="MinWidth" Value="300" />
+        </Style>
+        <Style x:Key="FileChooserTextBox" TargetType="TextBox">
+            <Setter Property="MinWidth" Value="280" />
+        </Style>
+        <Style x:Key="FileChooserButton" TargetType="Button">
+            <Setter Property="MinWidth" Value="20" />
         </Style>
     </Window.Resources>
     <DockPanel Margin="5">
@@ -48,7 +57,10 @@
             </WrapPanel>
             <WrapPanel>
                 <Label Target="{Binding ElementName=WorkingDirTextBox}" VerticalAlignment="Center">Working Directory:</Label>
-                <TextBox x:Name="WorkingDirTextBox" TextWrapping="NoWrap"></TextBox>
+                <WrapPanel Style="{StaticResource FileChooser}">
+                    <TextBox x:Name="WorkingDirTextBox" TextWrapping="NoWrap" Style="{StaticResource FileChooserTextBox}"></TextBox>
+                    <Button x:Name="WorkingDirButton" Click="OnFileChooserButtonClick" Style="{StaticResource FileChooserButton}">...</Button>
+                </WrapPanel>
             </WrapPanel>
             <WrapPanel>
                 <Label Target="{Binding ElementName=TypeComboBox}">Type:</Label>

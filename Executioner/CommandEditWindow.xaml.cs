@@ -39,12 +39,23 @@ namespace Executioner
             DescInputTextBox.Text = inputData.Description;
             TemplateInputTextBox.Text = inputData.Template;
             WaitForResultCheckBox.IsChecked = inputData.WaitForResult;
+            WorkingDirTextBox.Text = inputData.WorkingDir;
             SelectedType = inputData.Type;
         }
 
         public void OnOKButtonClick(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
+        }
+
+        public void OnFileChooserButtonClick(object sender, RoutedEventArgs e)
+        {
+            OpenFolderDialog openFolderDialog = new OpenFolderDialog();
+            if (WorkingDirTextBox.Text.Length > 0)
+                openFolderDialog.InitialDirectory = WorkingDirTextBox.Text;
+
+            if (openFolderDialog.ShowDialog() == true)
+                WorkingDirTextBox.Text = openFolderDialog.FolderName;
         }
 
         public CommandData OutputData 
@@ -54,7 +65,7 @@ namespace Executioner
                 ShellType type = (ShellType)TypeComboBox.SelectedIndex;
 
                 return new CommandData(commandId, NameInputTextBox.Text, DescInputTextBox.Text,
-                    TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, "",
+                    TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, WorkingDirTextBox.Text,
                     type);
             } 
         }
