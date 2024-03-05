@@ -8,76 +8,52 @@
         mc:Ignorable="d"
         Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="Padding" Value="5,2"/>
+        <Style x:Key="GridMargin" TargetType="{x:Type Control}">
+            <Setter Property="Margin" Value="5,2"/>
         </Style>
-
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="MinWidth" Value="300"/>
-        </Style>
-        <Style x:Key="MultiLineTextBox" TargetType="{x:Type Control}">
-            <Setter Property="Height" Value="50" />
-            <Setter Property="MinWidth" Value="300"/>
-        </Style>
-        <Style TargetType="{x:Type ComboBox}">
-            <Setter Property="MinWidth" Value="300"/>
-        </Style>
-        <Style TargetType="{x:Type WrapPanel}">
-            <Setter Property="Margin" Value="0,0,0,5"/>
-        </Style>
-        <Style TargetType="{x:Type Label}">
-            <Setter Property="Width" Value="120"/>
-        </Style>
-        <Style x:Key="FileChooser" TargetType="WrapPanel">
-            <Setter Property="MinWidth" Value="300" />
-        </Style>
-        <Style x:Key="FileChooserTextBox" TargetType="TextBox">
-            <Setter Property="MinWidth" Value="280" />
-        </Style>
-        <Style x:Key="FileChooserButton" TargetType="Button">
-            <Setter Property="MinWidth" Value="20" />
+        <Style x:Key="MultiLineTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="MinHeight" Value="50"/>
+            <Setter Property="Margin" Value="5,2"/>
         </Style>
     </Window.Resources>
     <DockPanel Margin="5">
-        <StackPanel DockPanel.Dock="Top">
-            <WrapPanel>
-                <Label Margin="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
-                <TextBox x:Name="NameInputTextBox" HorizontalAlignment="Stretch"  TextWrapping="NoWrap" />
-            </WrapPanel>
-            <WrapPanel>
-                <Label Target="{Binding ElementName=DescInputTextBox}">Beschreibung:</Label>
-                <TextBox x:Name="DescInputTextBox" TextWrapping="Wrap" Style="{StaticResource MultiLineTextBox}" />
-            </WrapPanel>
-            <WrapPanel>
-                <Label Target="{Binding ElementName=TemplateInputTextBox}">Template:</Label>
-                <TextBox x:Name="TemplateInputTextBox" TextWrapping="Wrap" Style="{StaticResource MultiLineTextBox}" />
-            </WrapPanel>
-            <WrapPanel>
-                <Label Target="{Binding ElementName=WaitForResultCheckBox}" VerticalAlignment="Center">Wait for result:</Label>
-                <CheckBox x:Name="WaitForResultCheckBox" VerticalAlignment="Center" HorizontalAlignment="Left"></CheckBox>
-            </WrapPanel>
-            <WrapPanel>
-                <Label Target="{Binding ElementName=WorkingDirTextBox}" VerticalAlignment="Center">Working Directory:</Label>
-                <WrapPanel Style="{StaticResource FileChooser}">
-                    <TextBox x:Name="WorkingDirTextBox" TextWrapping="NoWrap" Style="{StaticResource FileChooserTextBox}"></TextBox>
-                    <Button x:Name="WorkingDirButton" Click="OnFileChooserButtonClick" Style="{StaticResource FileChooserButton}">...</Button>
-                </WrapPanel>
-            </WrapPanel>
-            <WrapPanel>
-                <Label Target="{Binding ElementName=WorkingDirTextBox2}" VerticalAlignment="Center">Working Directory2:</Label>
-                <controls:FileChooserEdit Width="300" Height="20"/>
-            </WrapPanel>
-            <WrapPanel>
-                <Label Target="{Binding ElementName=TypeComboBox}">Type:</Label>
-                <ComboBox x:Name="TypeComboBox" 
+        <Grid DockPanel.Dock="Top" MinWidth="400">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Margin="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
+            <TextBox x:Name="NameInputTextBox" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" />
+
+            <Label Grid.Row="1" Grid.Column="0" Target="{Binding ElementName=DescInputTextBox}">Beschreibung:</Label>
+            <TextBox x:Name="DescInputTextBox" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Style="{StaticResource MultiLineTextBox}" />
+
+            <Label Grid.Row="2" Grid.Column="0" Target="{Binding ElementName=TemplateInputTextBox}">Template:</Label>
+            <TextBox x:Name="TemplateInputTextBox" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Style="{StaticResource MultiLineTextBox}" />
+
+            <Label Grid.Row="3" Grid.Column="0" Target="{Binding ElementName=WaitForResultCheckBox}" VerticalAlignment="Center">Wait for result:</Label>
+            <CheckBox x:Name="WaitForResultCheckBox" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{StaticResource GridMargin}"></CheckBox>
+
+            <Label Grid.Row="4" Grid.Column="0" Target="{Binding ElementName=WorkingDirTextBox}" VerticalAlignment="Center">Working Directory:</Label>
+            <controls:FileChooserEdit x:Name="WorkingDirTextBox" Grid.Row="4" Grid.Column="1" Style="{StaticResource GridMargin}"/>
+
+            <Label Grid.Row="5" Grid.Column="0" Target="{Binding ElementName=TypeComboBox}">Type:</Label>
+            <ComboBox x:Name="TypeComboBox" Grid.Row="5" Grid.Column="1" Style="{StaticResource GridMargin}"
                           VerticalAlignment="Center" 
                           ItemsSource="{Binding NameMapping}"
                           DisplayMemberPath="Value"
                           SelectedValuePath="Key"
                           SelectedValue="{Binding SelectedTypeProperty, Mode=TwoWay}" />
 
-            </WrapPanel>
-        </StackPanel>
+        </Grid>
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,5,0,5">
             <Button IsDefault="True" Width="80" Margin="0,0,10,0" Click="OnOKButtonClick" >OK</Button>
             <Button IsCancel="True" Width="80" >Abbrechen</Button>

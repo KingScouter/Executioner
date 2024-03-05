@@ -12,7 +12,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto" MinWidth="20" />
         </Grid.ColumnDefinitions>
         <TextBox x:Name="FileChooserTextBox" Grid.Column="0" TextWrapping="NoWrap"></TextBox>
         <Button x:Name="FileChooserButton" Grid.Column="1" Click="OnFileChooserButtonClick">...</Button>
