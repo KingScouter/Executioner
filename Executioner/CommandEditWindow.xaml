@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Executioner"
+        xmlns:controls="clr-namespace:Executioner.Controls"
         mc:Ignorable="d"
         Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <Window.Resources>
@@ -61,6 +62,10 @@
                     <TextBox x:Name="WorkingDirTextBox" TextWrapping="NoWrap" Style="{StaticResource FileChooserTextBox}"></TextBox>
                     <Button x:Name="WorkingDirButton" Click="OnFileChooserButtonClick" Style="{StaticResource FileChooserButton}">...</Button>
                 </WrapPanel>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Target="{Binding ElementName=WorkingDirTextBox2}" VerticalAlignment="Center">Working Directory2:</Label>
+                <controls:FileChooserEdit Width="300" Height="20"/>
             </WrapPanel>
             <WrapPanel>
                 <Label Target="{Binding ElementName=TypeComboBox}">Type:</Label>
