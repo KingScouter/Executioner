@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Executioner"
         xmlns:controls="clr-namespace:Executioner.Controls"
+        xmlns:models="clr-namespace:Executioner.Models"
         mc:Ignorable="d"
         Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <Style x:Key="GridMargin" TargetType="{x:Type Control}">
+        <Style x:Key="GridMargin" TargetType="{x:Type FrameworkElement}">
             <Setter Property="Margin" Value="5,2"/>
         </Style>
         <Style x:Key="MultiLineTextBox" TargetType="{x:Type TextBox}">
@@ -17,21 +18,22 @@
         </Style>
     </Window.Resources>
     <DockPanel Margin="5">
-        <Grid DockPanel.Dock="Top" MinWidth="400">
+        <Grid DockPanel.Dock="Top" Width="400">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="33*" />
+                <ColumnDefinition Width="67*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Margin="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
-            <TextBox x:Name="NameInputTextBox" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" />
+            <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
+            <TextBox x:Name="NameInputTextBox" Grid.Row="0" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" />
 
             <Label Grid.Row="1" Grid.Column="0" Target="{Binding ElementName=DescInputTextBox}">Beschreibung:</Label>
             <TextBox x:Name="DescInputTextBox" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Style="{StaticResource MultiLineTextBox}" />
@@ -52,6 +54,8 @@
                           DisplayMemberPath="Value"
                           SelectedValuePath="Key"
                           SelectedValue="{Binding SelectedTypeProperty, Mode=TwoWay}" />
+
+            <controls:UserInputParameterGrid x:Name="ParameterGrid" Grid.Row="6" Grid.ColumnSpan="2" Style="{StaticResource GridMargin}" MinHeight="150" />
 
         </Grid>
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,5,0,5">

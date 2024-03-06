@@ -33,7 +33,7 @@ namespace Executioner.Models
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             KeyValuePair<ShellType, string> convertedElement = NameMapping.First(elem => elem.Value == value.ToString());
-            if (convertedElement.Value != null)
+            if (convertedElement.Value == null)
                 return ShellType.Cmd;
 
             return convertedElement.Key;

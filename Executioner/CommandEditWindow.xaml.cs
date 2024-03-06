@@ -11,10 +11,22 @@ namespace Executioner
     {
         private int commandId = 0;
 
-        private ShellType SelectedType = ShellType.Cmd;
+        private ShellType selectedType = ShellType.Cmd;
         public ShellType SelectedTypeProperty
         {
-            get { return SelectedType; }
+            get { return selectedType; }
+            set { ; }
+        }
+
+        private List<BaseUserInputParameter> mockParameters = [
+            new TextUserInputParameter("test1", "test1"),
+            new TextUserInputParameter("test2", "test2"),
+            new TextUserInputParameter("test3", "test3"),
+        ];
+
+        public List<BaseUserInputParameter> MockParametersProperty 
+        { 
+            get { return mockParameters; } 
             set { ; }
         }
 
@@ -27,6 +39,7 @@ namespace Executioner
         {
             InitializeComponent();
             this.DataContext = this;
+            ParameterGrid.Parameters = mockParameters;
         }
 
         public CommandEditWindow(CommandData inputData)
@@ -40,7 +53,9 @@ namespace Executioner
             TemplateInputTextBox.Text = inputData.Template;
             WaitForResultCheckBox.IsChecked = inputData.WaitForResult;
             WorkingDirTextBox.Text = inputData.WorkingDir;
-            SelectedType = inputData.Type;
+            selectedType = inputData.Type;
+
+            ParameterGrid.Parameters = mockParameters;
         }
 
         public void OnOKButtonClick(object sender, RoutedEventArgs e)
