@@ -1,0 +1,49 @@
+﻿<Window x:Class="Executioner.UserInputParameterEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Executioner"
+        mc:Ignorable="d"
+        Title="UserInputParameterEditWindow" Width="400" ResizeMode="CanMinimize" SizeToContent="Height">
+    <Window.Resources>
+        <Style x:Key="GridMargin" TargetType="{x:Type FrameworkElement}">
+            <Setter Property="Margin" Value="5,2"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=KeywordInputTextBox}">Keyword:</Label>
+            <TextBox x:Name="KeywordInputTextBox" Grid.Row="0" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" />
+
+            <Label Grid.Row="1" Grid.Column="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
+            <TextBox x:Name="NameInputTextBox" Grid.Row="1" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" />
+
+            <Label Grid.Row="2" Grid.Column="0" Target="{Binding ElementName=TypeComboBox}">Type:</Label>
+            <ComboBox x:Name="TypeComboBox" Grid.Row="2" Grid.Column="1" Style="{StaticResource GridMargin}"
+                          VerticalAlignment="Center" 
+                          ItemsSource="{Binding NameMapping}"
+                          DisplayMemberPath="Value"
+                          SelectedValuePath="Key"
+                          SelectedValue="{Binding SelectedTypeProperty, Mode=TwoWay}" />
+        </Grid>
+        <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,5,5,5">
+            <Button IsDefault="True" Width="80" Margin="0,0,10,0" Click="OnOKButtonClick" >OK</Button>
+            <Button IsCancel="True" Width="80" >Abbrechen</Button>
+        </WrapPanel>
+    </DockPanel>
+</Window>

@@ -16,7 +16,10 @@ namespace Executioner.Controls
             get { return parameters; }
             set
             {
-                parameters = value;
+                if (value == null)
+                    parameters = [];
+                else
+                    parameters = value;
                 ParametersGrid.ItemsSource = parameters;
             }
         }
@@ -28,12 +31,31 @@ namespace Executioner.Controls
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            UserInputParameterEditWindow editWindow = new UserInputParameterEditWindow();
+            if (editWindow.ShowDialog() == true) 
+            {
+                parameters.Add(editWindow.OutputData);
+                RefreshGrid();
+            }
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (ParametersGrid.SelectedItem is BaseUserInputParameter selectedItem)
+            {
+                UserInputParameterEditWindow editWindow = new UserInputParameterEditWindow(selectedItem);
+                if (editWindow.ShowDialog() == true)
+                {
+                    BaseUserInputParameter data = editWindow.OutputData;
+                    int dataIdx = parameters.FindIndex(elem => elem.Keyword == selectedItem.Keyword);
+                    if (dataIdx != -1)
+                    {
+                        parameters.RemoveAt(dataIdx);
+                        parameters.Insert(dataIdx, data);
+                        RefreshGrid();
+                    }
+                }
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)

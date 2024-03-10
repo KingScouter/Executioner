@@ -1,13 +1,17 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace Executioner.Models
 {
-    public abstract class BaseUserInputParameter
+    [JsonDerivedType(typeof(BaseUserInputParameter), typeDiscriminator: "base")]
+    [JsonDerivedType(typeof(TextUserInputParameter), typeDiscriminator: "text")]
+    public class BaseUserInputParameter
     {
         public string Keyword { get; set; }
         public string Name { get; set; }
-        public UserInputParameterType Type { get; set; }
+        public ParameterType Type { get; set; }
 
-        public BaseUserInputParameter(string keyword, string name, UserInputParameterType type)
+        public BaseUserInputParameter(string keyword, string name, ParameterType type)
         {
             Keyword = keyword;
             Name = name;

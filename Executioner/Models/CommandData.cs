@@ -9,10 +9,11 @@
         public bool WaitForResult { get; set; }
         public string WorkingDir { get; set; }
         public ShellType Type { get; set; }
-        public IList<BaseUserInputParameter> Parameters { get; set; } = [];
+        public List<BaseUserInputParameter> Parameters { get; set; } = [];
 
         public CommandData(int id, string name, string description, string template,
-            bool waitForResult, string workingDir, ShellType type)
+            bool waitForResult, string workingDir, ShellType type,
+            List<BaseUserInputParameter> parameters)
         {
             Id = id;
             Name = name;
@@ -21,6 +22,7 @@
             WaitForResult = waitForResult;
             WorkingDir = workingDir;
             Type = type;
+            Parameters = parameters;
         }
     }
 }

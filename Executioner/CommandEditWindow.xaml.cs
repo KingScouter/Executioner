@@ -18,18 +18,6 @@ namespace Executioner
             set { ; }
         }
 
-        private List<BaseUserInputParameter> mockParameters = [
-            new TextUserInputParameter("test1", "test1"),
-            new TextUserInputParameter("test2", "test2"),
-            new TextUserInputParameter("test3", "test3"),
-        ];
-
-        public List<BaseUserInputParameter> MockParametersProperty 
-        { 
-            get { return mockParameters; } 
-            set { ; }
-        }
-
         public static Dictionary<ShellType, string> NameMapping 
         {
             get { return ShellTypeConverter.NameMapping; }
@@ -38,14 +26,13 @@ namespace Executioner
         public CommandEditWindow()
         {
             InitializeComponent();
-            this.DataContext = this;
-            ParameterGrid.Parameters = mockParameters;
+            DataContext = this;
         }
 
         public CommandEditWindow(CommandData inputData)
         {
             InitializeComponent();
-            this.DataContext = this;
+            DataContext = this;
 
             commandId = inputData.Id;
             NameInputTextBox.Text = inputData.Name;
@@ -55,7 +42,7 @@ namespace Executioner
             WorkingDirTextBox.Text = inputData.WorkingDir;
             selectedType = inputData.Type;
 
-            ParameterGrid.Parameters = mockParameters;
+            ParameterGrid.Parameters = inputData.Parameters;
         }
 
         public void OnOKButtonClick(object sender, RoutedEventArgs e)
@@ -81,7 +68,7 @@ namespace Executioner
 
                 return new CommandData(commandId, NameInputTextBox.Text, DescInputTextBox.Text,
                     TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, WorkingDirTextBox.Text,
-                    type);
+                    type, ParameterGrid.Parameters);
             } 
         }
     }

@@ -8,7 +8,7 @@ namespace Executioner.Models
 {
     public class TextUserInputParameter : BaseUserInputParameter
     {
-        public TextUserInputParameter(string keyword, string name) : base(keyword, name, UserInputParameterType.Text)
+        public TextUserInputParameter(string keyword, string name) : base(keyword, name, ParameterType.Text)
         {
         }
     }
