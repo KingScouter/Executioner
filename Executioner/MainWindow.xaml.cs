@@ -38,22 +38,8 @@ namespace Executioner
             if (context is not null && context is CommandData)
             {
                 CommandData data = (context as CommandData)!;
-                try
-                {
-                    switch(data.Type)
-                    {
-                        case ShellType.Cmd:
-                            ExecuteCmdCommand(data.Template, data.WaitForResult, data.WorkingDir);
-                            break;
-                        case ShellType.Powershell:
-                            ExecutePowershellCommand(data.Template, data.WaitForResult, data.WorkingDir);
-                            break;
-                    }
-                } catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error");
-                }
-                
+
+                CommandExecutor.ExecuteCommand(data);
             }
         }
 
@@ -85,46 +71,6 @@ namespace Executioner
                 }
 
             }
-        }
-
-        private void ExecuteCmdCommand(string commandTemplate, Boolean waitForResult, string workingDir)
-        {
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.FileName = "cmd.exe";
-
-            if (waitForResult)
-                commandTemplate += "& pause";
-
-            if (workingDir != "")
-                startInfo.WorkingDirectory = workingDir;
-
-            startInfo.Arguments = $"/C {commandTemplate}";
-
-            ExecuteProcess(startInfo);
-        }
-
-        private void ExecutePowershellCommand(string commandTemplate, Boolean waitForResult, string workingDir)
-        {
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.FileName = "powershell.exe";
-
-            if (waitForResult)
-                commandTemplate += "; pause";
-
-            if (workingDir != "")
-                startInfo.WorkingDirectory = workingDir;
-
-            startInfo.Arguments = $"-ExecutionPolicy Bypass \"{commandTemplate}\"";
-            startInfo.UseShellExecute = false;
-
-            ExecuteProcess(startInfo);
-        }
-
-        private void ExecuteProcess(System.Diagnostics.ProcessStartInfo startInfo)
-        {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            process.StartInfo = startInfo;
-            process.Start();
         }
 
         private void AddButtonClick(object sender, RoutedEventArgs e)
