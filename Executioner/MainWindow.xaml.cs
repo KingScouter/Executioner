@@ -34,12 +34,19 @@ namespace Executioner
 
         private void ExecuteCommand(object sender, RoutedEventArgs e)
         {
-            object context = (sender as Button)!.DataContext;
-            if (context is not null && context is CommandData)
+            try
             {
-                CommandData data = (context as CommandData)!;
+                object context = (sender as Button)!.DataContext;
+                if (context is not null && context is CommandData)
+                {
+                    CommandData data = (context as CommandData)!;
 
-                CommandExecutor.ExecuteCommand(data);
+                    CommandExecutor.ExecuteCommand(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusBarTextBox.Text = $"Execution of command cancelled: {ex.Message}";
             }
         }
 

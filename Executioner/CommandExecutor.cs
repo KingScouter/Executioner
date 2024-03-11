@@ -1,4 +1,5 @@
-﻿using Executioner.Models;
+﻿using Executioner.InputWindows;
+using Executioner.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace Executioner
     {
         public static void ExecuteCommand(CommandData commandData)
         {
-            ParseCommand(commandData);
-            ExecuteCommandInternal(commandData);
+            string parsedCommand = ParseCommand(commandData);
+            ExecuteCommandInternal(parsedCommand, commandData);
         }
 
         static string ParseCommand(CommandData commandData)
@@ -40,12 +41,10 @@ namespace Executioner
             foreach(string elem in templateElements)
             {
                 string parsedElement = ParseTemplateElement(elem, commandData.Parameters);
-                sb.AppendLine($"<{parsedElement}>");
+                sb.Append(parsedElement);
             }
 
-            MessageBox.Show(sb.ToString() );
-
-            return "";
+            return sb.ToString();
         }
 
         static string ParseTemplateElement(string templateElement, List<BaseUserInputParameter> parameters)
@@ -59,26 +58,26 @@ namespace Executioner
             string paramKeyword = templateElement.Substring(3, templateElement.Length - 5).Trim();
             BaseUserInputParameter? param = parameters.FirstOrDefault(elem => elem.Keyword == paramKeyword, null);
             if (param == null)
-            {
-                MessageBox.Show($"Param {paramKeyword} is not defined");
-                return templateElement;
-            }
+                throw new ArgumentException($"Param {paramKeyword} is not defined");
 
-            MessageBox.Show($"Param {paramKeyword} exists as {param.Name} with type {param.Type}");
-            return param.Name;
+            TextInputParameterWindow paramWindow = new TextInputParameterWindow(param.Name, param.Name);
+            if (paramWindow.ShowDialog() != true)
+                throw new ArgumentException($"User cancel");
+
+            return paramWindow.OutputData;
         }
 
-        private static void ExecuteCommandInternal(CommandData data)
+        private static void ExecuteCommandInternal(string parsedCommand, CommandData data)
         {
             try
             {
                 switch (data.Type)
                 {
                     case ShellType.Cmd:
-                        ExecuteCmdCommand(data.Template, data.WaitForResult, data.WorkingDir);
+                        ExecuteCmdCommand(parsedCommand, data.WaitForResult, data.WorkingDir);
                         break;
                     case ShellType.Powershell:
-                        ExecutePowershellCommand(data.Template, data.WaitForResult, data.WorkingDir);
+                        ExecutePowershellCommand(parsedCommand, data.WaitForResult, data.WorkingDir);
                         break;
                 }
             }

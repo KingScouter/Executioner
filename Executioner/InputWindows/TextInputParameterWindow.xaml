@@ -1,0 +1,33 @@
+﻿<Window x:Class="Executioner.InputWindows.TextInputParameterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Executioner.InputWindows"
+        mc:Ignorable="d"
+        Title="{Binding InputTitle}" Width="350" SizeToContent="Height" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Width" Value="50" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,0,0,0" Content="{Binding InputLabel}"></Label>
+        <TextBox Grid.Row="1" Grid.Column="1" x:Name="InputTextBox"></TextBox>
+        <WrapPanel Grid.Row="2"  Grid.Column="1" HorizontalAlignment="Right">
+            <Button IsDefault="True" x:Name="OKButton" Click="OKButton_Click">OK</Button>
+            <Button IsCancel="True">Cancel</Button>
+        </WrapPanel>
+    </Grid>
+</Window>
