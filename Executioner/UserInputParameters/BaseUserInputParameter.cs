@@ -1,11 +1,12 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Executioner.Models;
 
-namespace Executioner.Models
+namespace Executioner.UserInputParameters
 {
     //[JsonDerivedType(typeof(BaseUserGenericInputParameter<object>), typeDiscriminator: "base")]
     [JsonDerivedType(typeof(TextUserInputParameter), typeDiscriminator: "text")]
     [JsonDerivedType(typeof(NumberUserInputParameter), typeDiscriminator: "number")]
+    [JsonDerivedType(typeof(CheckBoxUserInputParameter), typeDiscriminator: "checkbox")]
     public abstract class IBaseUserInputParameter
     {
         public string Keyword { get; set; }
@@ -19,6 +20,6 @@ namespace Executioner.Models
             Type = type;
         }
 
-        public abstract string Execute();
+        public abstract BaseUserInputControl GetControl();
     }
 }

@@ -1,12 +1,8 @@
 ﻿using Executioner.InputWindows;
 using Executioner.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Executioner.UserInputParameters;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Executioner
 {
@@ -60,7 +56,16 @@ namespace Executioner
             if (param == null)
                 throw new ArgumentException($"Param {paramKeyword} is not defined");
 
-            return param.Execute();
+            return ExecuteParameter(param);
+        }
+
+        private static string ExecuteParameter(IBaseUserInputParameter param)
+        {
+            InputParameterWindow paramWindow = new InputParameterWindow(param);
+            if (paramWindow.ShowDialog() != true)
+                throw new ArgumentException($"User cancel");
+
+            return paramWindow.OutputData!;
         }
 
         private static void ExecuteCommandInternal(string parsedCommand, CommandData data)

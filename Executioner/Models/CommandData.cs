@@ -1,4 +1,6 @@
-﻿namespace Executioner.Models
+﻿using Executioner.UserInputParameters;
+
+namespace Executioner.Models
 {
     public class CommandData
     {

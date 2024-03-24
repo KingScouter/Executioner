@@ -1,5 +1,5 @@
 ﻿using Executioner.Models;
-using System.ComponentModel.Design;
+using Executioner.UserInputParameters;
 using System.Windows;
 
 namespace Executioner
@@ -47,15 +47,19 @@ namespace Executioner
             get
             {
                 ParameterType type = (ParameterType)TypeComboBox.SelectedIndex;
+                string keyword = KeywordInputTextBox.Text;
+                string name = NameInputTextBox.Text;
 
                 switch (type)
                 {
                     case ParameterType.Text:
-                        return new TextUserInputParameter(KeywordInputTextBox.Text, NameInputTextBox.Text);
+                        return new TextUserInputParameter(keyword, name);
                     case ParameterType.Number:
-                        return new NumberUserInputParameter(KeywordInputTextBox.Text, NameInputTextBox.Text);
+                        return new NumberUserInputParameter(keyword, name);
+                    case ParameterType.Checkbox:
+                        return new CheckBoxUserInputParameter(keyword, name);
                     default:
-                        return new TextUserInputParameter(KeywordInputTextBox.Text, NameInputTextBox.Text);
+                        return new TextUserInputParameter(keyword, name);
                 };
             }
         }
