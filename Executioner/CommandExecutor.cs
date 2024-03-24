@@ -20,7 +20,7 @@ namespace Executioner
 
         static string ParseCommand(CommandData commandData)
         {
-            List<string> templateElements = new List<string>();
+            List<string> templateElements = [];
 
             var matches = System.Text.RegularExpressions.Regex.Matches(commandData.Template, "(?:([^(?:\\$\\{\\{)]*)(\\$\\{\\{[\\s|\\d|\\w]*\\}\\})?)");
             foreach(System.Text.RegularExpressions.Match match in matches)
@@ -47,7 +47,7 @@ namespace Executioner
             return sb.ToString();
         }
 
-        static string ParseTemplateElement(string templateElement, List<BaseUserInputParameter> parameters)
+        static string ParseTemplateElement(string templateElement, List<IBaseUserInputParameter> parameters)
         {
 
             if (!templateElement.StartsWith("${{") || !templateElement.EndsWith("}}"))
@@ -56,15 +56,11 @@ namespace Executioner
             }
 
             string paramKeyword = templateElement.Substring(3, templateElement.Length - 5).Trim();
-            BaseUserInputParameter? param = parameters.FirstOrDefault(elem => elem.Keyword == paramKeyword, null);
+            IBaseUserInputParameter? param = parameters.FirstOrDefault(elem => elem.Keyword == paramKeyword, null);
             if (param == null)
                 throw new ArgumentException($"Param {paramKeyword} is not defined");
 
-            TextInputParameterWindow paramWindow = new TextInputParameterWindow(param.Name, param.Name);
-            if (paramWindow.ShowDialog() != true)
-                throw new ArgumentException($"User cancel");
-
-            return paramWindow.OutputData;
+            return param.Execute();
         }
 
         private static void ExecuteCommandInternal(string parsedCommand, CommandData data)
@@ -102,7 +98,7 @@ namespace Executioner
             ExecuteProcess(startInfo);
         }
 
-        private static void ExecutePowershellCommand(string commandTemplate, Boolean waitForResult, string workingDir)
+        private static void ExecutePowershellCommand(string commandTemplate, bool waitForResult, string workingDir)
         {
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.FileName = "powershell.exe";

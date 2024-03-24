@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Executioner.Models
 {
-    public class TextUserInputParameter : IBaseUserInputParameter
+    public class NumberUserInputParameter : IBaseUserInputParameter
     {
-        public TextUserInputParameter(string keyword, string name) : base(keyword, name, ParameterType.Text)
+        public NumberUserInputParameter(string keyword, string name) : base(keyword, name, ParameterType.Number)
         {
         }
 

@@ -27,7 +27,7 @@ namespace Executioner
             DataContext = this;
         }
 
-        public UserInputParameterEditWindow(BaseUserInputParameter data)
+        public UserInputParameterEditWindow(IBaseUserInputParameter data)
         {
             InitializeComponent();
             DataContext = this;
@@ -42,7 +42,7 @@ namespace Executioner
             DialogResult = true;
         }
 
-        public BaseUserInputParameter OutputData
+        public IBaseUserInputParameter OutputData
         {
             get
             {
@@ -52,6 +52,8 @@ namespace Executioner
                 {
                     case ParameterType.Text:
                         return new TextUserInputParameter(KeywordInputTextBox.Text, NameInputTextBox.Text);
+                    case ParameterType.Number:
+                        return new NumberUserInputParameter(KeywordInputTextBox.Text, NameInputTextBox.Text);
                     default:
                         return new TextUserInputParameter(KeywordInputTextBox.Text, NameInputTextBox.Text);
                 };

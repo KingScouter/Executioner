@@ -9,9 +9,9 @@ namespace Executioner.Controls
     /// </summary>
     public partial class UserInputParameterGrid : UserControl
     {
-        private List<BaseUserInputParameter> parameters = [];
+        private List<IBaseUserInputParameter> parameters = [];
 
-        public List<BaseUserInputParameter> Parameters
+        public List<IBaseUserInputParameter> Parameters
         {
             get { return parameters; }
             set
@@ -41,12 +41,12 @@ namespace Executioner.Controls
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ParametersGrid.SelectedItem is BaseUserInputParameter selectedItem)
+            if (ParametersGrid.SelectedItem is IBaseUserInputParameter selectedItem)
             {
                 UserInputParameterEditWindow editWindow = new UserInputParameterEditWindow(selectedItem);
                 if (editWindow.ShowDialog() == true)
                 {
-                    BaseUserInputParameter data = editWindow.OutputData;
+                    IBaseUserInputParameter data = editWindow.OutputData;
                     int dataIdx = parameters.FindIndex(elem => elem.Keyword == selectedItem.Keyword);
                     if (dataIdx != -1)
                     {
@@ -60,7 +60,7 @@ namespace Executioner.Controls
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ParametersGrid.SelectedItem is BaseUserInputParameter selectedItem)
+            if (ParametersGrid.SelectedItem is IBaseUserInputParameter selectedItem)
             {
                 parameters.Remove(selectedItem);
                 RefreshGrid();
