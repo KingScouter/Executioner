@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:Executioner.Controls"
         xmlns:models="clr-namespace:Executioner.Models"
         mc:Ignorable="d"
-        Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+        Title="EditWindow" ResizeMode="CanMinimize" ShowInTaskbar="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="GridMargin" TargetType="{x:Type FrameworkElement}">
             <Setter Property="Margin" Value="5,2"/>

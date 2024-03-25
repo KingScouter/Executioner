@@ -13,18 +13,16 @@ namespace Executioner
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<CommandData> commands = [];
-        private int commandIdx = 0;
+        private ProjectData project;
 
         public MainWindow(string? filename)
         {
             InitializeComponent();
 
-            CommandsDataGrid.ItemsSource = commands;
-            FillDataGrid();
+            InitializeProject(filename);
 
-            if (filename != null)
-                LoadProject(filename);
+            CommandsDataGrid.ItemsSource = project!.Commands;
+            FillDataGrid();
         }
 
         private void FillDataGrid()
@@ -50,33 +48,47 @@ namespace Executioner
             }
         }
 
-        private void EditCommand(object sender, RoutedEventArgs e)
+        private CommandData? GetCommandFromButtonContext(Button? sender)
         {
-            object context = (sender as Button)!.DataContext;
+            if (sender == null)
+                return null;
+
+            object context = sender.DataContext;
             if (context is not null && context is CommandData)
             {
                 CommandData data = (context as CommandData)!;
-                try
+                return project.GetCommand(data.Id);
+            }
+
+            return null;
+        }
+
+        private void EditCommand(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CommandData? data = GetCommandFromButtonContext(sender as Button);
+                if (data == null)
+                    return;
+
+                CommandData? commandData = project.GetCommand(data.Id);
+                if (commandData == null)
+                    return;
+
+                CommandEditWindow editWindow = new CommandEditWindow(commandData);
+                if (editWindow.ShowDialog() == true)
                 {
-                    CommandEditWindow editWindow = new CommandEditWindow(data);
-                    if (editWindow.ShowDialog() == true)
+                    CommandData newData = editWindow.OutputData!;
+                    if (project.UpdateCommand(newData))
                     {
-                        CommandData newData = editWindow.OutputData!;
-                        int commandIdx = commands.FindIndex(elem => elem.Id == data.Id);
-                        if (commandIdx != -1)
-                        {
-                            commands.RemoveAt(commandIdx);
-                            commands.Insert(commandIdx, newData);
-                            StatusBarTextBox.Text = $"Updated command at index {commandIdx}";
-                            FillDataGrid();
-                        }
+                        StatusBarTextBox.Text = $"Updated command";
+                        FillDataGrid();
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error");
-                }
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
             }
         }
 
@@ -92,17 +104,18 @@ namespace Executioner
 
         private void DeleteButtonClick(object sender, RoutedEventArgs e)
         {
-            if (commands.Count > 0)
-            {
-                commands.RemoveAt(commands.Count - 1);
+            CommandData? data = GetCommandFromButtonContext(sender as Button);
+            if (data == null)
+                return;
+
+            if (project.RemoveCommand(data.Id))
                 FillDataGrid();
-            }
+            
         }
 
         private void AddCommand(CommandData command)
         {
-            command.Id = commandIdx++;
-            commands.Add(command);
+            project.AddCommand(command);
         }
 
         private void CommonCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -112,17 +125,33 @@ namespace Executioner
 
         private void SaveMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            SaveProject(false);
+        }
+
+        private void SaveAsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SaveProject(true);
+        }
+
+        private void SaveProject(bool saveAs)
+        {
             try
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Executioner Project (*.json)|*.json";
-                if (saveFileDialog.ShowDialog() == true)
+                string filename = project.Filename;
+
+                if (filename == null)
+                    saveAs = true;
+
+                if (saveAs)
                 {
-                    StreamWriter sw = new StreamWriter(saveFileDialog.FileName);
-                    sw.Write(JsonSerializer.Serialize(commands));
-                    sw.Close();
-                    StatusBarTextBox.Text = $"Saved project to {saveFileDialog.FileName}";
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.Filter = "Executioner Project (*.json)|*.json";
+                    if (saveFileDialog.ShowDialog() == true)
+                        filename = saveFileDialog.FileName;
                 }
+
+                project.SaveProject(filename);
+                StatusBarTextBox.Text = $"Saved project to {filename}";
             }
             catch (Exception ex)
             {
@@ -135,36 +164,22 @@ namespace Executioner
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Executioner Project (*.json)|*.json";
             if (openFileDialog.ShowDialog() == true)
-                LoadProject(openFileDialog.FileName);
+                project.LoadProject(openFileDialog.FileName);
 
         }
 
-        private void LoadProject(string filename)
+        private void InitializeProject(string? filename)
         {
             try
             {
-                commands.Clear();
-
-                StreamReader sr = new StreamReader(filename);
-                string dataLine = sr.ReadToEnd();
-                if (dataLine != null)
-                {
-                    List<CommandData>? parsedCommands = JsonSerializer.Deserialize<List<CommandData>>(dataLine);
-                    if (parsedCommands != null)
-                    {
-                        commands.Clear();
-                        commands.AddRange(parsedCommands);
-                        FillDataGrid();
-                        StatusBarTextBox.Text = $"Loaded project from {filename}";
-                    }
-                }
-
-                sr.Close();
+                project = new ProjectData(filename);
+                FillDataGrid();
+                StatusBarTextBox.Text = $"Loaded project from {filename}";
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
         }
-    }
+}
 }
