@@ -1,8 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.IO;
-using System.Text.Json;
 using Microsoft.Win32;
 using Executioner.Models;
 
@@ -13,7 +11,7 @@ namespace Executioner
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ProjectData project;
+        private ProjectManager project;
 
         public MainWindow(string? filename)
         {
@@ -161,18 +159,27 @@ namespace Executioner
 
         private void LoadMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Executioner Project (*.json)|*.json";
-            if (openFileDialog.ShowDialog() == true)
-                project.LoadProject(openFileDialog.FileName);
-
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Executioner Project (*.json)|*.json";
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    project.LoadProject(openFileDialog.FileName);
+                    StatusBarTextBox.Text = $"Project {openFileDialog.FileName} loaded successfully";
+                }
+            }
+            catch (Exception ex) 
+            {
+                StatusBarTextBox.Text = $"Loading project failed: {ex.Message}";
+            }
         }
 
         private void InitializeProject(string? filename)
         {
             try
             {
-                project = new ProjectData(filename);
+                project = new ProjectManager(filename);
                 FillDataGrid();
                 StatusBarTextBox.Text = $"Loaded project from {filename}";
             }
