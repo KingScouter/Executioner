@@ -25,9 +25,23 @@ namespace Executioner.Models
             }
         }
 
+        public ProjectManager(string filename, string commandName, List<string> additionalArguments)
+        {
+            project = LoadProject(filename);
+            if (project == null)
+                throw new ArgumentException($"Project {filename} could not be loaded!");
+
+            CommandData? command = project.GetCommandByName(commandName);
+            if (command == null)
+                throw new ArgumentException($"Command {commandName} could not be found!");
+
+            CommandExecutor.ExecuteCommand(command);
+        }
+
 
         public ProjectData? LoadProject(string filename)
         {
+            this.filename = filename;
             StreamReader sr = new(filename);
             string dataLine = sr.ReadToEnd();
             sr.Close();
@@ -56,6 +70,11 @@ namespace Executioner.Models
         public CommandData? GetCommand(int id)
         {
             return project.GetCommand(id);
+        }
+
+        public CommandData? GetCommandByName(string name)
+        {
+            return project.GetCommandByName(name);
         }
 
         public bool UpdateCommand(CommandData command)

@@ -18,6 +18,11 @@
             return Commands.Find(elem => elem.Id == id);
         }
 
+        public CommandData? GetCommandByName(string name)
+        {
+            return Commands.Find(elem => elem.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
         public bool UpdateCommand(CommandData command)
         {
             int commandIdx = Commands.FindIndex(elem => elem.Id == command.Id);

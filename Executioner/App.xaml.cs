@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Executioner.Models;
+using System.Windows;
 
 namespace Executioner
 {
@@ -9,13 +10,46 @@ namespace Executioner
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            string? filename = null;
-            if (e.Args.Length == 1)
-                filename = e.Args[0];
+            try
+            {
+                string? filename = null;
+                string? commandName = null;
+                List<string> additionalArguments = [];
 
-            MainWindow wnd = new(filename);
+                int idx = -1;
+                foreach (string item in e.Args)
+                {
+                    idx++;
+                    switch (idx)
+                    {
+                        case 0:
+                            filename = item;
+                            break;
+                        case 1:
+                            commandName = item;
+                            break;
+                        default:
+                            additionalArguments.Add(item);
+                            break;
+                    }
+                }
 
-            wnd.Show();
+                if (e.Args.Length <= 1)
+                {
+                    MainWindow wnd = new(filename);
+                    wnd.Show();
+                    return;
+                }
+
+                ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                ProjectManager manager = new(filename!, commandName!, additionalArguments);
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Exception occured: {ex.Message}");
+            }
+            Shutdown(0);
         }
     }
 
