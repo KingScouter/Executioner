@@ -166,6 +166,10 @@ namespace Executioner
                 if (openFileDialog.ShowDialog() == true)
                 {
                     project.LoadProject(openFileDialog.FileName);
+
+                    CommandsDataGrid.ItemsSource = project!.Commands;
+                    FillDataGrid();
+
                     StatusBarTextBox.Text = $"Project {openFileDialog.FileName} loaded successfully";
                 }
             }

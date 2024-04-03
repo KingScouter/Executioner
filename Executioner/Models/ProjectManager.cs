@@ -16,7 +16,7 @@ namespace Executioner.Models
         public ProjectManager(string? filename)
         {
             if (filename != null)
-                project = LoadProject(filename);
+                LoadProject(filename);
             
             if (project == null)
             {
@@ -27,7 +27,7 @@ namespace Executioner.Models
 
         public ProjectManager(string filename, string commandName, List<string> additionalArguments)
         {
-            project = LoadProject(filename);
+            LoadProject(filename);
             if (project == null)
                 throw new ArgumentException($"Project {filename} could not be loaded!");
 
@@ -39,16 +39,14 @@ namespace Executioner.Models
         }
 
 
-        public ProjectData? LoadProject(string filename)
+        public void LoadProject(string filename)
         {
             this.filename = filename;
             StreamReader sr = new(filename);
             string dataLine = sr.ReadToEnd();
             sr.Close();
             if (dataLine != null)
-                return JsonSerializer.Deserialize<ProjectData>(dataLine);
-
-            return null;
+                project = JsonSerializer.Deserialize<ProjectData>(dataLine);
         }
 
         public void SaveProject(string? filename)
