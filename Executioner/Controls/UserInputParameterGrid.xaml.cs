@@ -9,9 +9,9 @@ namespace Executioner.Controls
     /// </summary>
     public partial class UserInputParameterGrid : UserControl
     {
-        private List<IBaseUserInputParameter> parameters = [];
+        private Dictionary<string, IBaseUserInputParameter> parameters = [];
 
-        public List<IBaseUserInputParameter> Parameters
+        public Dictionary<string, IBaseUserInputParameter> Parameters
         {
             get { return parameters; }
             set
@@ -34,7 +34,7 @@ namespace Executioner.Controls
             UserInputParameterEditWindow editWindow = new UserInputParameterEditWindow();
             if (editWindow.ShowDialog() == true) 
             {
-                parameters.Add(editWindow.OutputData);
+                parameters.Add(editWindow.OutputData.Keyword, editWindow.OutputData);
                 RefreshGrid();
             }
         }
@@ -47,11 +47,10 @@ namespace Executioner.Controls
                 if (editWindow.ShowDialog() == true)
                 {
                     IBaseUserInputParameter data = editWindow.OutputData;
-                    int dataIdx = parameters.FindIndex(elem => elem.Keyword == selectedItem.Keyword);
-                    if (dataIdx != -1)
+                    bool dataIdx = parameters.ContainsKey(selectedItem.Keyword);
+                    if (dataIdx)
                     {
-                        parameters.RemoveAt(dataIdx);
-                        parameters.Insert(dataIdx, data);
+                        parameters[selectedItem.Keyword] = data;
                         RefreshGrid();
                     }
                 }
@@ -62,7 +61,7 @@ namespace Executioner.Controls
         {
             if (ParametersGrid.SelectedItem is IBaseUserInputParameter selectedItem)
             {
-                parameters.Remove(selectedItem);
+                parameters.Remove(selectedItem.Keyword);
                 RefreshGrid();
             }
         }

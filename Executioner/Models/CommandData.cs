@@ -22,7 +22,7 @@ namespace Executioner.Models
         public bool WaitForResult { get; set; }
         public string WorkingDir { get; set; }
         public ShellType Type { get; set; }
-        public List<IBaseUserInputParameter> Parameters { get; set; } = [];
+        public Dictionary<string, IBaseUserInputParameter> Parameters { get; set; } = [];
 
         [JsonIgnore]
         public CommandTemplate CommandTemplate
@@ -37,7 +37,7 @@ namespace Executioner.Models
 
         public CommandData(string uuid, string keyword, string name, string description, string template,
             bool waitForResult, string workingDir, ShellType type,
-            List<IBaseUserInputParameter> parameters)
+            Dictionary<string, IBaseUserInputParameter> parameters)
         {
             UUID = uuid;
             Keyword = keyword;
@@ -48,6 +48,18 @@ namespace Executioner.Models
             WorkingDir = workingDir;
             Type = type;
             Parameters = parameters;
+        }
+
+        public bool Validate()
+        {
+            var templateParams = commandTemplate.GetParamElements();
+            foreach(var param in templateParams)
+            {
+                if (!Parameters.ContainsKey(param.keyword))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

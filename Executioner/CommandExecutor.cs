@@ -32,13 +32,13 @@ namespace Executioner
             return sb.ToString().Trim();
         }
 
-        static string ParseTemplateElement(string templateElement, List<IBaseUserInputParameter> parameters, List<string> additionalArguments)
+        static string ParseTemplateElement(string templateElement, Dictionary<string, IBaseUserInputParameter> parameters, List<string> additionalArguments)
         {
             string preSetValue = additionalArguments.FirstOrDefault("");
             if (additionalArguments.Count > 0)
                 additionalArguments.RemoveAt(0);
 
-            IBaseUserInputParameter? param = parameters.FirstOrDefault(elem => elem.Keyword == templateElement, null);
+            IBaseUserInputParameter? param = parameters[templateElement];
             if (param == null)
                 throw new ArgumentException($"Param {templateElement} is not defined");
 
