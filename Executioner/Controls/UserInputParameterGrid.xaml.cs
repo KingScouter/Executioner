@@ -64,7 +64,7 @@ namespace Executioner.Controls
             }
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        private void EditButton_Click(object sender, RoutedEventArgs? e)
         {
             if (ParametersGrid.SelectedItem is IBaseUserInputParameter selectedItem)
             {
@@ -89,8 +89,8 @@ namespace Executioner.Controls
                             parameters[data.Keyword] = data;
                         }
                         RefreshGrid();
-                        break;
                     }
+                    break;
                 }
             }
         }
@@ -108,6 +108,11 @@ namespace Executioner.Controls
         {
             ParametersGrid.ItemsSource = null;
             ParametersGrid.ItemsSource = ParametersGridSource;
+        }
+
+        private void ParametersGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            EditButton_Click(sender, null);
         }
     }
 }
