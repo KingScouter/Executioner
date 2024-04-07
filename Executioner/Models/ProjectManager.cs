@@ -35,7 +35,7 @@ namespace Executioner.Models
             if (command == null)
                 throw new ArgumentException($"Command {commandName} could not be found!");
 
-            CommandExecutor.ExecuteCommand(command);
+            CommandExecutor.ExecuteCommand(command, additionalArguments);
         }
 
 

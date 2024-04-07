@@ -37,7 +37,7 @@ namespace Executioner
                 {
                     CommandData data = (context as CommandData)!;
 
-                    CommandExecutor.ExecuteCommand(data);
+                    CommandExecutor.ExecuteCommand(data, []);
                 }
             }
             catch (Exception ex)

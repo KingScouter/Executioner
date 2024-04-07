@@ -6,15 +6,27 @@ using System.Windows;
 
 namespace Executioner
 {
+    internal class TemplateElement
+    {
+        public string value = "";
+        public string preSetValue = "";
+
+        public TemplateElement(string value, string preSetValue) 
+        { 
+            this.value = value;
+            this.preSetValue = preSetValue;
+        }
+    }
+
     internal class CommandExecutor
     {
-        public static void ExecuteCommand(CommandData commandData)
+        public static void ExecuteCommand(CommandData commandData, List<string> additionalArguments)
         {
-            string parsedCommand = ParseCommand(commandData);
+            string parsedCommand = ParseCommand(commandData, additionalArguments);
             ExecuteCommandInternal(parsedCommand, commandData);
         }
 
-        static string ParseCommand(CommandData commandData)
+        static string ParseCommand(CommandData commandData, List<string> additionalArguments)
         {
             List<string> templateElements = [];
 
@@ -34,16 +46,16 @@ namespace Executioner
             }
 
             StringBuilder sb = new StringBuilder();
-            foreach(string elem in templateElements)
+            foreach(var elem in templateElements)
             {
-                string parsedElement = ParseTemplateElement(elem, commandData.Parameters);
+                string parsedElement = ParseTemplateElement(elem, commandData.Parameters, additionalArguments);
                 sb.Append(parsedElement);
             }
 
             return sb.ToString();
         }
 
-        static string ParseTemplateElement(string templateElement, List<IBaseUserInputParameter> parameters)
+        static string ParseTemplateElement(string templateElement, List<IBaseUserInputParameter> parameters, List<string> additionalArguments)
         {
 
             if (!templateElement.StartsWith("${{") || !templateElement.EndsWith("}}"))
@@ -51,10 +63,17 @@ namespace Executioner
                 return templateElement;
             }
 
+            string preSetValue = additionalArguments.FirstOrDefault("");
+            if (additionalArguments.Count > 0)
+                additionalArguments.RemoveAt(0);
+
             string paramKeyword = templateElement.Substring(3, templateElement.Length - 5).Trim();
             IBaseUserInputParameter? param = parameters.FirstOrDefault(elem => elem.Keyword == paramKeyword, null);
             if (param == null)
                 throw new ArgumentException($"Param {paramKeyword} is not defined");
+
+            if (preSetValue != "")
+                return preSetValue;
 
             return ExecuteParameter(param);
         }
