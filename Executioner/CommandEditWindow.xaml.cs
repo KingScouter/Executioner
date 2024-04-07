@@ -50,7 +50,14 @@ namespace Executioner
 
         public void OnOKButtonClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            try
+            {
+                OutputData.Validate();
+                DialogResult = true;
+            } catch (Exception ex)
+            {
+                MessageBox.Show($"Command invalid - Saving not possible: {ex.Message}");
+            }
         }
 
         public void OnFileChooserButtonClick(object sender, RoutedEventArgs e)

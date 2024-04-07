@@ -50,16 +50,14 @@ namespace Executioner.Models
             Parameters = parameters;
         }
 
-        public bool Validate()
+        public void Validate()
         {
             var templateParams = commandTemplate.GetParamElements();
             foreach(var param in templateParams)
             {
                 if (!Parameters.ContainsKey(param.keyword))
-                    return false;
+                    throw new ArgumentException($"Parameter with keyword {param.keyword} not found!");
             }
-
-            return true;
         }
     }
 }
