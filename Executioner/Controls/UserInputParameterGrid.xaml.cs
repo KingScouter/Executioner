@@ -11,6 +11,14 @@ namespace Executioner.Controls
     {
         private Dictionary<string, IBaseUserInputParameter> parameters = [];
 
+        private List<IBaseUserInputParameter> ParametersGridSource
+        {
+            get
+            {
+                return [.. parameters.Values];
+            }
+        }
+
         public Dictionary<string, IBaseUserInputParameter> Parameters
         {
             get { return parameters; }
@@ -20,7 +28,7 @@ namespace Executioner.Controls
                     parameters = [];
                 else
                     parameters = value;
-                ParametersGrid.ItemsSource = parameters;
+                ParametersGrid.ItemsSource = ParametersGridSource;
             }
         }
 
@@ -31,11 +39,28 @@ namespace Executioner.Controls
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            UserInputParameterEditWindow editWindow = new UserInputParameterEditWindow();
-            if (editWindow.ShowDialog() == true) 
+            IBaseUserInputParameter? data = null;
+            while (true)
             {
-                parameters.Add(editWindow.OutputData.Keyword, editWindow.OutputData);
-                RefreshGrid();
+                UserInputParameterEditWindow editWindow;
+                if (data == null)
+                    editWindow = new();
+                else
+                    editWindow = new(data);
+
+                if (editWindow.ShowDialog() == true)
+                {
+                    data = editWindow.OutputData;
+
+                    if (parameters.ContainsKey(data.Keyword))
+                    {
+                        MessageBox.Show($"Parameter with keyword {data.Keyword} already exists!");
+                        continue;
+                    }
+                    parameters.Add(data.Keyword, data);
+                    RefreshGrid();
+                }
+                break;
             }
         }
 
@@ -43,15 +68,28 @@ namespace Executioner.Controls
         {
             if (ParametersGrid.SelectedItem is IBaseUserInputParameter selectedItem)
             {
-                UserInputParameterEditWindow editWindow = new UserInputParameterEditWindow(selectedItem);
-                if (editWindow.ShowDialog() == true)
+                IBaseUserInputParameter data = selectedItem;
+                while (true)
                 {
-                    IBaseUserInputParameter data = editWindow.OutputData;
-                    bool dataIdx = parameters.ContainsKey(selectedItem.Keyword);
-                    if (dataIdx)
+                    UserInputParameterEditWindow editWindow = new UserInputParameterEditWindow(data);
+                    if (editWindow.ShowDialog() == true)
                     {
-                        parameters[selectedItem.Keyword] = data;
+                        data = editWindow.OutputData;
+                        if (!data.Keyword.Equals(selectedItem.Keyword, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            if (parameters.ContainsKey(data.Keyword))
+                            {
+                                MessageBox.Show($"Parameter with keyword {data.Keyword} already exists!");
+                                continue;
+                            }
+                            parameters.Remove(selectedItem.Keyword);
+                            parameters.Add(data.Keyword, data);
+                        } else
+                        {
+                            parameters[data.Keyword] = data;
+                        }
                         RefreshGrid();
+                        break;
                     }
                 }
             }
@@ -68,7 +106,8 @@ namespace Executioner.Controls
 
         private void RefreshGrid()
         {
-            ParametersGrid.Items.Refresh();
+            ParametersGrid.ItemsSource = null;
+            ParametersGrid.ItemsSource = ParametersGridSource;
         }
     }
 }
