@@ -65,9 +65,9 @@ namespace Executioner.Models
             project.AddCommand(command);
         }
 
-        public CommandData? GetCommand(int id)
+        public CommandData? GetCommand(string uuid)
         {
-            return project.GetCommand(id);
+            return project.GetCommand(uuid);
         }
 
         public CommandData? GetCommandByName(string name)
@@ -80,9 +80,9 @@ namespace Executioner.Models
             return project.UpdateCommand(command);
         }
 
-        public bool RemoveCommand(int id)
+        public bool RemoveCommand(string uuid)
         {
-            return project.RemoveCommand(id);
+            return project.RemoveCommand(uuid);
         }
     }
 }

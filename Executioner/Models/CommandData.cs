@@ -4,7 +4,8 @@ namespace Executioner.Models
 {
     public class CommandData
     {
-        public int Id { get; set; }
+        public string UUID { get; set; }
+        public string Keyword { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Template { get; set; }
@@ -13,11 +14,12 @@ namespace Executioner.Models
         public ShellType Type { get; set; }
         public List<IBaseUserInputParameter> Parameters { get; set; } = [];
 
-        public CommandData(int id, string name, string description, string template,
+        public CommandData(string uuid, string keyword, string name, string description, string template,
             bool waitForResult, string workingDir, ShellType type,
             List<IBaseUserInputParameter> parameters)
         {
-            Id = id;
+            UUID = uuid;
+            Keyword = keyword;
             Name = name;
             Description = description;
             Template = template; ;

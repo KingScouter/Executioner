@@ -2,20 +2,18 @@
 {
     public class ProjectData
     {
-        private static int commandIdx = 0;
-
         public List<CommandData> Commands { get; set; } = [];
         public string ProjectName { get; set; } = "";
 
         public void AddCommand(CommandData command)
         {
-            command.Id = commandIdx++;
+            command.UUID = Guid.NewGuid().ToString();
             Commands.Add(command);
         }
 
-        public CommandData? GetCommand(int id)
+        public CommandData? GetCommand(string uuid)
         {
-            return Commands.Find(elem => elem.Id == id);
+            return Commands.Find(elem => elem.UUID == uuid);
         }
 
         public CommandData? GetCommandByName(string name)
@@ -25,7 +23,7 @@
 
         public bool UpdateCommand(CommandData command)
         {
-            int commandIdx = Commands.FindIndex(elem => elem.Id == command.Id);
+            int commandIdx = Commands.FindIndex(elem => elem.UUID == command.UUID);
             if (commandIdx != -1)
             {
                 Commands.RemoveAt(commandIdx);
@@ -36,9 +34,9 @@
             return false;
         }
 
-        public bool RemoveCommand(int id)
+        public bool RemoveCommand(string uuid)
         {
-            int commandIdx = Commands.FindIndex(elem => elem.Id == id);
+            int commandIdx = Commands.FindIndex(elem => elem.UUID == uuid);
             if (commandIdx != -1)
             {
                 Commands.RemoveAt(commandIdx);

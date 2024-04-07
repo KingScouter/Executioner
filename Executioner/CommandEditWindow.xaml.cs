@@ -9,7 +9,7 @@ namespace Executioner
     /// </summary>
     public partial class CommandEditWindow : Window
     {
-        private int commandId = 0;
+        string uuid = "";
 
         private ShellType selectedType = ShellType.Cmd;
         public ShellType SelectedTypeProperty
@@ -27,6 +27,8 @@ namespace Executioner
         {
             InitializeComponent();
             DataContext = this;
+
+            ParameterGrid.Parameters = [];
         }
 
         public CommandEditWindow(CommandData inputData)
@@ -34,7 +36,8 @@ namespace Executioner
             InitializeComponent();
             DataContext = this;
 
-            commandId = inputData.Id;
+            uuid = inputData.UUID;
+            KeywordInputTextBox.Text = inputData.Keyword;
             NameInputTextBox.Text = inputData.Name;
             DescInputTextBox.Text = inputData.Description;
             TemplateInputTextBox.Text = inputData.Template;
@@ -66,7 +69,7 @@ namespace Executioner
             {
                 ShellType type = (ShellType)TypeComboBox.SelectedIndex;
 
-                return new CommandData(commandId, NameInputTextBox.Text, DescInputTextBox.Text,
+                return new CommandData(uuid, KeywordInputTextBox.Text, NameInputTextBox.Text, DescInputTextBox.Text,
                     TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, WorkingDirTextBox.Text,
                     type, ParameterGrid.Parameters);
             } 

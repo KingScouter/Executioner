@@ -55,7 +55,7 @@ namespace Executioner
             if (context is not null && context is CommandData)
             {
                 CommandData data = (context as CommandData)!;
-                return project.GetCommand(data.Id);
+                return project.GetCommand(data.UUID);
             }
 
             return null;
@@ -69,7 +69,7 @@ namespace Executioner
                 if (data == null)
                     return;
 
-                CommandData? commandData = project.GetCommand(data.Id);
+                CommandData? commandData = project.GetCommand(data.UUID);
                 if (commandData == null)
                     return;
 
@@ -106,7 +106,7 @@ namespace Executioner
             if (data == null)
                 return;
 
-            if (project.RemoveCommand(data.Id))
+            if (project.RemoveCommand(data.UUID))
                 FillDataGrid();
             
         }
@@ -184,12 +184,12 @@ namespace Executioner
             try
             {
                 project = new ProjectManager(filename);
-                FillDataGrid();
                 StatusBarTextBox.Text = $"Loaded project from {filename}";
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                project = new ProjectManager(null);
+                StatusBarTextBox.Text = $"Loading project from {filename} failed!: {ex.Message}";
             }
         }
 }
