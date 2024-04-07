@@ -6,18 +6,6 @@ using System.Windows;
 
 namespace Executioner
 {
-    internal class TemplateElement
-    {
-        public string value = "";
-        public string preSetValue = "";
-
-        public TemplateElement(string value, string preSetValue) 
-        { 
-            this.value = value;
-            this.preSetValue = preSetValue;
-        }
-    }
-
     internal class CommandExecutor
     {
         public static void ExecuteCommand(CommandData commandData, List<string> additionalArguments)
@@ -28,49 +16,31 @@ namespace Executioner
 
         static string ParseCommand(CommandData commandData, List<string> additionalArguments)
         {
-            List<string> templateElements = [];
+            CommandTemplate commandTemplate = new(commandData.Template);
 
-            var matches = System.Text.RegularExpressions.Regex.Matches(commandData.Template, "(?:([^(?:\\$\\{\\{)]*)(\\$\\{\\{[\\s|\\d|\\w]*\\}\\})?)");
-            foreach(System.Text.RegularExpressions.Match match in matches)
+            StringBuilder sb = new();
+            foreach(var elem in commandTemplate.elements)
             {
-                bool first = true;
-                foreach(System.Text.RegularExpressions.Group group in match.Groups)
-                {
-                    if (first)
-                    {
-                        first = false;
-                        continue;
-                    }
-                    templateElements.Add(group.Value);
-                }
+                if (!elem.isParam)
+                    sb.Append(elem.ToString());
+                else
+                    sb.Append(ParseTemplateElement(elem.keyword, commandData.Parameters, additionalArguments));
+
+                sb.Append(' ');
             }
 
-            StringBuilder sb = new StringBuilder();
-            foreach(var elem in templateElements)
-            {
-                string parsedElement = ParseTemplateElement(elem, commandData.Parameters, additionalArguments);
-                sb.Append(parsedElement);
-            }
-
-            return sb.ToString();
+            return sb.ToString().Trim();
         }
 
         static string ParseTemplateElement(string templateElement, List<IBaseUserInputParameter> parameters, List<string> additionalArguments)
         {
-
-            if (!templateElement.StartsWith("${{") || !templateElement.EndsWith("}}"))
-            {
-                return templateElement;
-            }
-
             string preSetValue = additionalArguments.FirstOrDefault("");
             if (additionalArguments.Count > 0)
                 additionalArguments.RemoveAt(0);
 
-            string paramKeyword = templateElement.Substring(3, templateElement.Length - 5).Trim();
-            IBaseUserInputParameter? param = parameters.FirstOrDefault(elem => elem.Keyword == paramKeyword, null);
+            IBaseUserInputParameter? param = parameters.FirstOrDefault(elem => elem.Keyword == templateElement, null);
             if (param == null)
-                throw new ArgumentException($"Param {paramKeyword} is not defined");
+                throw new ArgumentException($"Param {templateElement} is not defined");
 
             if (preSetValue != "")
                 return preSetValue;
