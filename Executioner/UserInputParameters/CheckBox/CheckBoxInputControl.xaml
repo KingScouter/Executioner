@@ -6,5 +6,7 @@
              xmlns:local="clr-namespace:Executioner.UserInputParameters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <CheckBox x:Name="InputCheckBox" />
+    <WrapPanel>
+        <CheckBox x:Name="InputCheckBox" />
+    </WrapPanel>
 </local:BaseUserInputControl>

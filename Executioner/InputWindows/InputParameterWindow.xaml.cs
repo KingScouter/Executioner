@@ -50,7 +50,7 @@ namespace Executioner.InputWindows
             Grid.SetRow(activeControl, 1);
 
             MainGrid.Children.Add(activeControl);
-            activeControl.Focus();
+            activeControl.FocusControl();
         }
     }
 }

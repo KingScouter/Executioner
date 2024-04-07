@@ -17,5 +17,10 @@
         {
             InitializeComponent();
         }
+
+        public override void FocusControl()
+        {
+            InputTextBox.Focus();
+        }
     }
 }
