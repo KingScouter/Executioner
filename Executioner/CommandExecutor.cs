@@ -16,7 +16,7 @@ namespace Executioner
 
         static string ParseCommand(CommandData commandData, List<string> additionalArguments)
         {
-            CommandTemplate commandTemplate = new(commandData.Template);
+            CommandTemplate commandTemplate = commandData.CommandTemplate;
 
             StringBuilder sb = new();
             foreach(var elem in commandTemplate.elements)
@@ -50,7 +50,7 @@ namespace Executioner
 
         private static string ExecuteParameter(IBaseUserInputParameter param)
         {
-            InputParameterWindow paramWindow = new InputParameterWindow(param);
+            InputParameterWindow paramWindow = new(param);
             if (paramWindow.ShowDialog() != true)
                 throw new ArgumentException($"User cancel");
 
@@ -78,8 +78,10 @@ namespace Executioner
         }
         private static void ExecuteCmdCommand(string commandTemplate, Boolean waitForResult, string workingDir)
         {
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.FileName = "cmd.exe";
+            System.Diagnostics.ProcessStartInfo startInfo = new()
+            {
+                FileName = "cmd.exe"
+            };
 
             if (waitForResult)
                 commandTemplate += "& pause";
@@ -94,8 +96,10 @@ namespace Executioner
 
         private static void ExecutePowershellCommand(string commandTemplate, bool waitForResult, string workingDir)
         {
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.FileName = "powershell.exe";
+            System.Diagnostics.ProcessStartInfo startInfo = new()
+            {
+                FileName = "powershell.exe"
+            };
 
             if (waitForResult)
                 commandTemplate += "; pause";

@@ -2,7 +2,7 @@
 
 namespace Executioner.Models
 {
-    internal class CommandTemplate
+    public class CommandTemplate
     {
         public const string templateRegex = "(?:([^(?:\\$\\{\\{)]*)(\\$\\{\\{[\\s|\\d|\\w]*\\}\\})?)";
 

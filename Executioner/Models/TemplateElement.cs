@@ -1,6 +1,6 @@
 ﻿namespace Executioner.Models
 {
-    internal class TemplateElement(string keyword, bool isParam)
+    public class TemplateElement(string keyword, bool isParam)
     {
         public const string templateParamStart = "${{";
         public const string templateParamEnd = "}}";
