@@ -35,6 +35,8 @@ namespace Executioner.Controls
         public UserInputParameterGrid()
         {
             InitializeComponent();
+
+            EnableEditButtons(false);
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -113,6 +115,20 @@ namespace Executioner.Controls
         private void ParametersGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             EditButton_Click(sender, null);
+        }
+
+        private void ParametersGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            bool elemSelected = ParametersGrid.SelectedItems.Count > 0;
+
+            EnableEditButtons(elemSelected);
+        }
+
+        private void EnableEditButtons(bool enabled)
+        {
+            EditButton.IsEnabled = enabled;
+            DeleteButton.IsEnabled = enabled;
+            //CopyButton.IsEnabled = enabled;
         }
     }
 }

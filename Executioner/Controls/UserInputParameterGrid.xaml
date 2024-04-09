@@ -19,7 +19,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <DataGrid x:Name="ParametersGrid" AutoGenerateColumns="False" IsReadOnly="True"
-              Grid.Column="0" HeadersVisibility="Column" MouseDoubleClick="ParametersGrid_MouseDoubleClick">
+              Grid.Column="0" HeadersVisibility="Column" MouseDoubleClick="ParametersGrid_MouseDoubleClick" SelectionChanged="ParametersGrid_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Keyword" Binding="{Binding Keyword}" Width="*" />
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
