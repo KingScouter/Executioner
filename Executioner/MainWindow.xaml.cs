@@ -61,7 +61,7 @@ namespace Executioner
             return null;
         }
 
-        private void EditCommand(object sender, RoutedEventArgs e)
+        private void EditCommand(object sender, RoutedEventArgs? e)
         {
             try
             {
@@ -192,5 +192,10 @@ namespace Executioner
                 StatusBarTextBox.Text = $"Loading project from {filename} failed!: {ex.Message}";
             }
         }
-}
+
+        private void CommandsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            EditCommand(sender, null);
+        }
+    }
 }
