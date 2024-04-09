@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using Executioner.Models;
 using Microsoft.Win32;
 
@@ -80,6 +81,17 @@ namespace Executioner
                     TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, WorkingDirTextBox.Text,
                     type, ParameterGrid.Parameters);
             } 
+        }
+
+        private void KeywordInputTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+
+        private static readonly Regex _regex = new Regex("[^a-zA-Z]+"); //regex that matches disallowed text
+        private static bool IsTextAllowed(string text)
+        {
+            return !_regex.IsMatch(text);
         }
     }
 }
