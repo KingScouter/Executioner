@@ -1,8 +1,25 @@
 ﻿using Executioner.Models;
 using System.Windows;
+using CommandLine;
 
 namespace Executioner
 {
+    internal class Options
+    {
+        [Option('p', "project", Required = false, HelpText = "Project to open")]
+        public string ProjectFile { get; set; } = "";
+
+        [Option('c', "cmd", Required = false, HelpText = "Command to execute")]
+        public string CommandName { get; set; } = "";
+
+        [Option('a', "args", Required = false, HelpText = "Arguments for the command execution")]
+        public IEnumerable<string> AdditionalArguments { get; set; } = [];
+
+        [Value(0)]
+        public IEnumerable<string> Misc { get; set; } = [];
+
+    }
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -10,42 +27,31 @@ namespace Executioner
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Parser.Default.ParseArguments<Options>(e.Args)
+                .WithParsed(RunOptions);
+        }
+
+        void RunOptions(Options opts)
+        {
             try
             {
-                string? filename = null;
-                string? commandName = null;
-                List<string> additionalArguments = [];
-
-                int idx = -1;
-                foreach (string item in e.Args)
+                if (opts.CommandName == "" || opts.ProjectFile == "")
                 {
-                    idx++;
-                    switch (idx)
-                    {
-                        case 0:
-                            filename = item;
-                            break;
-                        case 1:
-                            commandName = item;
-                            break;
-                        default:
-                            additionalArguments.Add(item);
-                            break;
-                    }
-                }
-
-                if (e.Args.Length <= 1)
-                {
-                    MainWindow wnd = new(filename);
+                    MainWindow wnd = new(opts.ProjectFile);
                     wnd.Show();
                     return;
                 }
 
-                ShutdownMode = ShutdownMode.OnExplicitShutdown;
-                ProjectManager manager = new(filename!, commandName!, additionalArguments);
+                List<string> additionalArgs = [];
+                if (opts.AdditionalArguments.Any()) 
+                    additionalArgs.AddRange(opts.AdditionalArguments);
+                else if (opts.Misc.Any())
+                    additionalArgs.AddRange(opts.Misc);
 
+                ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                ProjectManager manager = new(opts.ProjectFile, opts.CommandName, additionalArgs);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Exception occured: {ex.Message}");
             }
