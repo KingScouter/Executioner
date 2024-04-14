@@ -93,5 +93,10 @@ namespace Executioner
         {
             return !_regex.IsMatch(text);
         }
+
+        private void ParameterGrid_InsertParamKeyword(object sender, Controls.InsertParamKeywordArgs e)
+        {
+            TemplateInputTextBox.AppendText($" {TemplateElement.ToParameterString(e.InsertKeyword)}");
+        }
     }
 }

@@ -18,7 +18,7 @@
         </Style>
     </Window.Resources>
     <DockPanel Margin="5">
-        <Grid DockPanel.Dock="Top" Width="400">
+        <Grid DockPanel.Dock="Top" Width="450">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="33*" />
                 <ColumnDefinition Width="67*" />
@@ -59,7 +59,8 @@
                           SelectedValuePath="Key"
                           SelectedValue="{Binding SelectedTypeProperty, Mode=TwoWay}" />
 
-            <controls:UserInputParameterGrid x:Name="ParameterGrid" Grid.Row="7" Grid.ColumnSpan="2" Style="{StaticResource GridMargin}" MinHeight="150" />
+            <controls:UserInputParameterGrid x:Name="ParameterGrid" Grid.Row="7" Grid.ColumnSpan="2" Style="{StaticResource GridMargin}" 
+                                             MinHeight="150" InsertParamKeyword="ParameterGrid_InsertParamKeyword" />
 
         </Grid>
         <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0,5,0,5">

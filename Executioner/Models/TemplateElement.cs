@@ -23,9 +23,14 @@
         public override string ToString()
         {
             if (isParam)
-                return $"{templateParamStart} {keyword} {templateParamEnd}";
+                return ToParameterString(keyword);
 
             return keyword;
+        }
+
+        public static string ToParameterString(string keyword)
+        {
+            return $"{templateParamStart} {keyword} {templateParamEnd}";
         }
     }
 }

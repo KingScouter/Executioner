@@ -4,11 +4,18 @@ using System.Windows.Controls;
 
 namespace Executioner.Controls
 {
+    public class InsertParamKeywordArgs(string keyword) : System.EventArgs
+    {
+        public string InsertKeyword { get; set; } = keyword;
+    }
+
     /// <summary>
     /// Interaction logic for UserInputParameterGrid.xaml
     /// </summary>
     public partial class UserInputParameterGrid : UserControl
     {
+        public event EventHandler<InsertParamKeywordArgs> InsertParamKeyword;
+
         private Dictionary<string, IBaseUserInputParameter> parameters = [];
 
         private List<IBaseUserInputParameter> ParametersGridSource
@@ -129,6 +136,16 @@ namespace Executioner.Controls
             EditButton.IsEnabled = enabled;
             DeleteButton.IsEnabled = enabled;
             //CopyButton.IsEnabled = enabled;
+        }
+
+        private void InsertParamButton_Click(object sender, RoutedEventArgs e)
+        {
+            object? context = (sender as Button)?.DataContext;
+            if (context is not null && context is IBaseUserInputParameter)
+            {
+                InsertParamKeyword?.Invoke(this, 
+                    new InsertParamKeywordArgs((context as IBaseUserInputParameter)!.Keyword));
+            }
         }
     }
 }
