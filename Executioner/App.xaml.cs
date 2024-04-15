@@ -15,6 +15,9 @@ namespace Executioner
         [Option('a', "args", Required = false, HelpText = "Arguments for the command execution")]
         public IEnumerable<string> AdditionalArguments { get; set; } = [];
 
+        [Option('d', "dry-run", Required = false, HelpText = "Print the command without executing it")]
+        public bool DryRun { get; set; } = false;
+
         [Value(0)]
         public IEnumerable<string> Misc { get; set; } = [];
 
@@ -49,7 +52,7 @@ namespace Executioner
                     additionalArgs.AddRange(opts.Misc);
 
                 ShutdownMode = ShutdownMode.OnExplicitShutdown;
-                ProjectManager manager = new(opts.ProjectFile, opts.CommandName, additionalArgs);
+                ProjectManager manager = new(opts.ProjectFile, opts.CommandName, additionalArgs, opts.DryRun);
             }
             catch (Exception ex)
             {

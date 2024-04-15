@@ -8,9 +8,15 @@ namespace Executioner
 {
     internal class CommandExecutor
     {
-        public static void ExecuteCommand(CommandData commandData, List<string> additionalArguments)
+        public static void ExecuteCommand(CommandData commandData, List<string> additionalArguments, bool dryRun)
         {
             string parsedCommand = ParseCommand(commandData, additionalArguments);
+
+            if (dryRun)
+            {
+                MessageBox.Show(parsedCommand, "Dry Run");
+                return;
+            }
             ExecuteCommandInternal(parsedCommand, commandData);
         }
 

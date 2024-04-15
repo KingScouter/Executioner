@@ -25,7 +25,7 @@ namespace Executioner.Models
             }
         }
 
-        public ProjectManager(string filename, string commandName, List<string> additionalArguments)
+        public ProjectManager(string filename, string commandName, List<string> additionalArguments, bool dryRun)
         {
             LoadProject(filename);
             if (project == null)
@@ -35,7 +35,7 @@ namespace Executioner.Models
             if (command == null)
                 throw new ArgumentException($"Command {commandName} could not be found!");
 
-            CommandExecutor.ExecuteCommand(command, additionalArguments);
+            CommandExecutor.ExecuteCommand(command, additionalArguments, dryRun);
         }
 
 
