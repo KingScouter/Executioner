@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Executioner"
+        xmlns:controls="clr-namespace:Executioner.Controls"
         mc:Ignorable="d"
         Title="UserInputParameterEditWindow" Width="400" ResizeMode="CanMinimize" SizeToContent="Height" WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -28,7 +29,7 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=KeywordInputTextBox}">Keyword:</Label>
-            <TextBox x:Name="KeywordInputTextBox" Grid.Row="0" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" />
+            <controls:AdvancedTextInputBox x:Name="KeywordInputTextBox" Grid.Row="0" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" Mode="CharOnly" AllowWhitespace="False" />
 
             <Label Grid.Row="1" Grid.Column="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
             <TextBox x:Name="NameInputTextBox" Grid.Row="1" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" />

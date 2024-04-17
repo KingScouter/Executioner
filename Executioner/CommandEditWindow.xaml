@@ -34,8 +34,8 @@
                 <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=KeywordInputTextBox}">Keyword:</Label>
-            <TextBox x:Name="KeywordInputTextBox" Grid.Row="0" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" PreviewTextInput="KeywordInputTextBox_PreviewTextInput"/>
-            
+            <controls:AdvancedTextInputBox Mode="CharOnly" AllowWhitespace="False" x:Name="KeywordInputTextBox" Grid.Row="0" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}"/>
+
             <Label Grid.Row="1" Grid.Column="0" Target="{Binding ElementName=NameInputTextBox}">Name:</Label>
             <TextBox x:Name="NameInputTextBox" Grid.Row="1" Grid.Column="1" TextWrapping="NoWrap" Style="{StaticResource GridMargin}" />
 
