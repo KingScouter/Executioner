@@ -38,6 +38,7 @@ namespace Executioner
         static string ParseCommand(CommandData commandData, List<string> additionalArguments)
         {
             CommandTemplate commandTemplate = commandData.CommandTemplate;
+            Dictionary<string, string> parsedValues = [];
 
             StringBuilder sb = new();
             foreach(var elem in commandTemplate.elements)
@@ -45,7 +46,16 @@ namespace Executioner
                 if (!elem.isParam)
                     sb.Append(elem.ToString());
                 else
-                    sb.Append(ParseTemplateElement(elem.keyword, commandData.Parameters, additionalArguments));
+                {
+                    if (parsedValues.ContainsKey(elem.keyword))
+                        sb.Append(parsedValues[elem.keyword]);
+                    else
+                    {
+                        string parsedValue = ParseTemplateElement(elem.keyword, commandData.Parameters, additionalArguments);
+                        sb.Append(parsedValue);
+                        parsedValues.Add(elem.keyword, parsedValue);
+                    }
+                }
 
                 sb.Append(' ');
             }
