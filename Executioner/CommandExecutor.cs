@@ -116,6 +116,9 @@ namespace Executioner
                     case ShellType.Cmd:
                         ExecuteCmdCommand(parsedCommand, data.WaitForResult, data.WorkingDir);
                         break;
+                    case ShellType.WindowsPowershell:
+                        ExecuteWindowsPowershellCommand(parsedCommand, data.WaitForResult, data.WorkingDir);
+                        break;
                     case ShellType.Powershell:
                         ExecutePowershellCommand(parsedCommand, data.WaitForResult, data.WorkingDir);
                         break;
@@ -157,7 +160,7 @@ namespace Executioner
         /// <param name="commandTemplate">Command template</param>
         /// <param name="waitForResult">Flag to determine if the CLI should remain open after the execution finished</param>
         /// <param name="workingDir">Working directory</param>
-        private static void ExecutePowershellCommand(string commandTemplate, bool waitForResult, string workingDir)
+        private static void ExecuteWindowsPowershellCommand(string commandTemplate, bool waitForResult, string workingDir)
         {
             System.Diagnostics.ProcessStartInfo startInfo = new()
             {
@@ -171,6 +174,31 @@ namespace Executioner
                 startInfo.WorkingDirectory = workingDir;
 
             startInfo.Arguments = $"-ExecutionPolicy Bypass \"{commandTemplate}\"";
+            startInfo.UseShellExecute = false;
+
+            ExecuteProcess(startInfo);
+        }
+
+        /// <summary>
+        /// Execute a command in the PowerShell
+        /// </summary>
+        /// <param name="commandTemplate">Command template</param>
+        /// <param name="waitForResult">Flag to determine if the CLI should remain open after the execution finished</param>
+        /// <param name="workingDir">Working directory</param>
+        private static void ExecutePowershellCommand(string commandTemplate, bool waitForResult, string workingDir)
+        {
+            System.Diagnostics.ProcessStartInfo startInfo = new()
+            {
+                FileName = "pwsh.exe"
+            };
+
+            if (waitForResult)
+                commandTemplate += "; pause";
+
+            if (workingDir != "")
+                startInfo.WorkingDirectory = workingDir;
+
+            startInfo.Arguments = $"-ExecutionPolicy Bypass -command \"{commandTemplate}\"";
             startInfo.UseShellExecute = false;
 
             ExecuteProcess(startInfo);

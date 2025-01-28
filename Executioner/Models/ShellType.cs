@@ -5,8 +5,9 @@ namespace Executioner.Models
     public enum ShellType
     {
         Cmd,
-        Powershell,
-        Bash
+        WindowsPowershell,
+        Bash,
+        Powershell
     }
 
     public class ShellTypeConverter : IValueConverter
@@ -14,8 +15,9 @@ namespace Executioner.Models
         public static Dictionary<ShellType, string> NameMapping { get; } = new Dictionary<ShellType, string>()
         {
             { ShellType.Cmd, "Windows Commandline" },
-            { ShellType.Powershell, "Windows Powershell" },
-            { ShellType.Bash, "Bash" }
+            { ShellType.WindowsPowershell, "Windows Powershell" },
+            { ShellType.Bash, "Bash" },
+            { ShellType.Powershell, "Powershell" }
         };
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

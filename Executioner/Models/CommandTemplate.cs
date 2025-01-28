@@ -4,7 +4,7 @@ namespace Executioner.Models
 {
     public class CommandTemplate
     {
-        public const string templateRegex = "(?:([^(?:\\$\\{\\{)]*)(\\$\\{\\{[\\s|\\d|\\w]*\\}\\})?)";
+        public const string templateRegex = "(?:([^(\\$\\{\\{)]*)(\\$\\{\\{[\\s|\\d|\\w]*\\}\\})?)";
 
         public List<TemplateElement> elements = [];
 
