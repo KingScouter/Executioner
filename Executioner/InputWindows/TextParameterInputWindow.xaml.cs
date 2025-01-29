@@ -32,12 +32,18 @@ namespace Executioner.InputWindows
 
         private void TextParameterInputWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
-                CloseWindow(false);
-            else if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter || e.Key == Key.Escape)
             {
-                OutputData = ParamTextBox.Text;
-                CloseWindow(true);
+                e.Handled = true;
+                bool result = false;
+
+                if (e.Key == Key.Enter)
+                {
+                    result = true;
+                    OutputData = ParamTextBox.Text;
+                }
+
+                CloseWindow(result);
             }
         }
 
