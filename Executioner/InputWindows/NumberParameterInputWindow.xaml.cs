@@ -21,7 +21,7 @@ namespace Executioner.InputWindows
     public partial class NumberParameterInputWindow : BaseParameterInputWindow
     {
         public override string OutputValue { get => ParamTextBox.Text; }
-        public override Control FocusControl { get => ParamTextBox; }
+        public override UIElement FocusControl { get => ParamTextBox; }
         public NumberParameterInputWindow(IBaseUserInputParameter param): base(param)
         {
             InitializeComponent();

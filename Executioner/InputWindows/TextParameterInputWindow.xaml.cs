@@ -13,7 +13,7 @@ namespace Executioner.InputWindows
 
         public override string OutputValue { get => ParamTextBox.Text; }
 
-        public override Control FocusControl { get => ParamTextBox; }
+        public override UIElement FocusControl { get => ParamTextBox; }
 
         public TextParameterInputWindow(IBaseUserInputParameter param): base(param)
         {

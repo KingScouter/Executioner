@@ -16,7 +16,7 @@ namespace Executioner.Controls
     /// <summary>
     /// Interaction logic for AdvancedTextInputBox.xaml
     /// </summary>
-    public partial class AdvancedTextInputBox : TextBox
+    public partial class AdvancedTextInputBox : StackPanel
     {
         public static readonly DependencyProperty ModeProperty =
         DependencyProperty.RegisterAttached("Mode", typeof(TextInputBoxMode), typeof(AdvancedTextInputBox), new PropertyMetadata(default(TextInputBoxMode)));
@@ -30,6 +30,20 @@ namespace Executioner.Controls
         {
             return (TextInputBoxMode)element.GetValue(ModeProperty);
         }
+
+        // Exposed properties from the TextBox
+        public string Text { get => InputTextBox.Text; set => InputTextBox.Text = value; }
+        public TextWrapping TextWrapping { get => InputTextBox.TextWrapping; set => InputTextBox.TextWrapping = value; }
+        public VerticalAlignment VerticalContentAlignment { get => InputTextBox.VerticalContentAlignment; set => InputTextBox.VerticalContentAlignment = value; }
+        public double FontSize { get => InputTextBox.FontSize; 
+            set 
+            {
+                InputTextBox.FontSize = value;
+                PrefixLabel.FontSize = value;
+            } 
+        }
+        public int MaxLines { get => InputTextBox.MaxLines; set => InputTextBox.MaxLines = value; }
+        public Thickness BorderThickness { get => InputTextBox.BorderThickness; set => InputTextBox.BorderThickness = value; }
 
         public bool AllowWhitespace { get; set; } = true;
 
@@ -70,29 +84,36 @@ namespace Executioner.Controls
         private TextInputBoxMode mode = TextInputBoxMode.All;
         private Regex formatRegex = AllRegex();
 
-        private Brush defaultForeground;
+        private readonly Brush defaultForeground;
 
         public AdvancedTextInputBox()
         {
             InitializeComponent();
 
-            Loaded += AdvancedTextInputBox_Loaded;
+            defaultForeground = InputTextBox.Foreground;
+            InputTextBox.Loaded += AdvancedTextInputBox_Loaded;
         }
 
         private void AdvancedTextInputBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            bool isValid = IsTextAllowed(((AdvancedTextInputBox)sender).Text);
+            bool isValid = IsTextAllowed(((TextBox)sender).Text);
             if (isValid)
-                Foreground = defaultForeground;
+            {
+                InputTextBox.Foreground = defaultForeground;
+                PrefixLabel.Visibility = Visibility.Hidden;
+            }
             else
-                Foreground = Brushes.Red;
+            {
+                InputTextBox.Foreground = Brushes.Red;
+                PrefixLabel.Visibility = Visibility.Visible;
+                PrefixLabel.Content = '!';
+            }
         }
 
         private void AdvancedTextInputBox_Loaded(object sender, RoutedEventArgs e)
         {
             Mode = AdvancedTextInputBox.GetMode(this);
-            defaultForeground = Foreground;
-            Loaded -= AdvancedTextInputBox_Loaded;
+            InputTextBox.Loaded -= AdvancedTextInputBox_Loaded;
         }
 
         
@@ -105,6 +126,16 @@ namespace Executioner.Controls
         {
             if (!AllowWhitespace && e.Key == Key.Space)
                 e.Handled = true;
+        }
+
+        private void StackPanel_GotFocus(object sender, RoutedEventArgs e)
+        {
+            InputTextBox.Focus();
+        }
+
+        private void StackPanel_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            InputTextBox.Focus();
         }
     }
 }

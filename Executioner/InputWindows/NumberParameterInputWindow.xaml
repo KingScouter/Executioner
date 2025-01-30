@@ -10,6 +10,6 @@
         Title="NumberParameterInputWindow">
     <StackPanel>
         <Label x:Name="ParamLabel" Background="Transparent" Content="{Binding InputLabel}"></Label>
-        <controls:AdvancedTextInputBox x:Name="ParamTextBox" Background="Transparent" BorderBrush="{x:Null}" FontSize="24" MaxLines="1" VerticalAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0,0,0,0" Mode="NumberOnly"/>
+        <controls:AdvancedTextInputBox x:Name="ParamTextBox" Background="Transparent" FontSize="24" MaxLines="1" VerticalAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0,0,0,0" Mode="NumberOnly"/>
     </StackPanel>
 </local:BaseParameterInputWindow>

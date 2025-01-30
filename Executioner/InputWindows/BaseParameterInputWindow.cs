@@ -14,7 +14,7 @@ namespace Executioner.InputWindows
 
         public string InputLabel { get; set; } = "";
 
-        public abstract Control FocusControl { get; }
+        public abstract UIElement FocusControl { get; }
         public abstract string OutputValue { get; }
 
         static BaseParameterInputWindow()
@@ -24,7 +24,7 @@ namespace Executioner.InputWindows
 
         public BaseParameterInputWindow(IBaseUserInputParameter param)
         {
-            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Deactivated += BaseParameterInputWindow_Deactivated;
             KeyDown += BaseParameterInputWindow_KeyDown;
 
