@@ -9,7 +9,7 @@
     GotKeyboardFocus="StackPanel_GotKeyboardFocus"
     Focusable="True"
     d:DesignHeight="450" d:DesignWidth="800" Orientation="Horizontal">
-    <Label x:Name="PrefixLabel" Visibility="Hidden"/>
+    <Label x:Name="PrefixLabel" Opacity="0"/>
     <TextBox x:Name="InputTextBox" TextChanged="AdvancedTextInputBox_TextChanged"
         PreviewKeyDown="TextBox_PreviewKeyDown" Background="Transparent"></TextBox>
 </StackPanel>

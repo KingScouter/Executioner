@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace Executioner.Controls
 {
@@ -71,6 +72,35 @@ namespace Executioner.Controls
             }
         }
 
+        private bool IsValid { get => isValid; set
+            {
+                if (isValid == value)
+                    return;
+
+                if (value)
+                {
+                    if (prefixFadeInStoryboard != null)
+                    {
+                        prefixFadeInStoryboard.Stop();
+                        prefixFadeInStoryboard = null;
+                    }
+                    PrefixFadeOut();
+                } else
+                {
+                    if (prefixFadeOutStoryboard != null)
+                    {
+                        prefixFadeOutStoryboard.Stop();
+                        prefixFadeOutStoryboard = null;
+                    }
+                    PrefixFadeIn();
+                }
+
+                isValid = value;
+            } 
+        }
+
+        private bool isValid = true;
+
 
         [GeneratedRegex(".+")]
         private static partial Regex AllRegex();
@@ -81,16 +111,23 @@ namespace Executioner.Controls
         [GeneratedRegex("^(?:-(?:[1-9](?:\\d{0,2}(?:,\\d{3})+|\\d*))|(?:0|(?:[1-9](?:\\d{0,2}(?:,\\d{3})+|\\d*))))(?:.\\d+|)$")]
         private static partial Regex NumberOnlyRegex();
 
+        private static readonly Brush errorColor = Brushes.Red;
+
         private TextInputBoxMode mode = TextInputBoxMode.All;
         private Regex formatRegex = AllRegex();
 
         private readonly Brush defaultForeground;
+
+        private Storyboard? prefixFadeInStoryboard;
+        private Storyboard? prefixFadeOutStoryboard;
 
         public AdvancedTextInputBox()
         {
             InitializeComponent();
 
             defaultForeground = InputTextBox.Foreground;
+            PrefixLabel.Foreground = errorColor;
+            PrefixLabel.Content = '!';
             InputTextBox.Loaded += AdvancedTextInputBox_Loaded;
         }
 
@@ -98,16 +135,10 @@ namespace Executioner.Controls
         {
             bool isValid = IsTextAllowed(((TextBox)sender).Text);
             if (isValid)
-            {
                 InputTextBox.Foreground = defaultForeground;
-                PrefixLabel.Visibility = Visibility.Hidden;
-            }
             else
-            {
-                InputTextBox.Foreground = Brushes.Red;
-                PrefixLabel.Visibility = Visibility.Visible;
-                PrefixLabel.Content = '!';
-            }
+                InputTextBox.Foreground = errorColor;
+            IsValid = isValid;
         }
 
         private void AdvancedTextInputBox_Loaded(object sender, RoutedEventArgs e)
@@ -136,6 +167,40 @@ namespace Executioner.Controls
         private void StackPanel_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             InputTextBox.Focus();
+        }
+
+        /// <summary>
+        /// Animated Fade-In for the prefix-label
+        /// </summary>
+        private void PrefixFadeIn()
+        {
+            if (PrefixLabel.Opacity != 0)
+                return;
+
+            DoubleAnimation anim = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromMilliseconds(500)));
+            prefixFadeInStoryboard = new Storyboard();
+            prefixFadeInStoryboard.Children.Add(anim);
+
+            Storyboard.SetTarget(anim, PrefixLabel);
+            Storyboard.SetTargetProperty(anim, new PropertyPath(OpacityProperty));
+            prefixFadeInStoryboard.Begin();
+        }
+
+        /// <summary>
+        /// Animated Fade-Out for the prefix-label
+        /// </summary>
+        private void PrefixFadeOut()
+        {
+            if (PrefixLabel.Opacity != 1)
+                return;
+
+            DoubleAnimation anim = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(500)));
+            prefixFadeOutStoryboard = new Storyboard();
+            prefixFadeOutStoryboard.Children.Add(anim);
+
+            Storyboard.SetTarget(anim, PrefixLabel);
+            Storyboard.SetTargetProperty(anim, new PropertyPath(OpacityProperty));
+            prefixFadeOutStoryboard.Begin();
         }
     }
 }
