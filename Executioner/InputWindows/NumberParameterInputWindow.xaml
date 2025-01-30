@@ -1,0 +1,15 @@
+﻿<local:BaseParameterInputWindow x:Class="Executioner.InputWindows.NumberParameterInputWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:Executioner.Controls"
+        xmlns:local="clr-namespace:Executioner.InputWindows"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="NumberParameterInputWindow">
+    <StackPanel>
+        <Label x:Name="ParamLabel" Background="Transparent" Content="{Binding InputLabel}"></Label>
+        <controls:AdvancedTextInputBox x:Name="ParamTextBox" Background="Transparent" BorderBrush="{x:Null}" FontSize="24" MaxLines="1" VerticalAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0,0,0,0" Mode="NumberOnly"/>
+    </StackPanel>
+</local:BaseParameterInputWindow>

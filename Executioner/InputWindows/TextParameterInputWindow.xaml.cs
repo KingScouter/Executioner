@@ -1,5 +1,6 @@
 ﻿using Executioner.UserInputParameters;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Executioner.InputWindows
@@ -10,23 +11,13 @@ namespace Executioner.InputWindows
     public partial class TextParameterInputWindow : BaseParameterInputWindow
     {
 
-        public string InputLabel { get; set; } = "";
-        public string OutputData { get; private set; } = "";
+        public override string OutputValue { get => ParamTextBox.Text; }
 
+        public override Control FocusControl { get => ParamTextBox; }
 
-        public TextParameterInputWindow(IBaseUserInputParameter param)
+        public TextParameterInputWindow(IBaseUserInputParameter param): base(param)
         {
             InitializeComponent();
-
-            DataContext = this;
-            InputLabel = param.Name;
-
-            ParamTextBox.Focus();
-        }
-
-        protected override void HandleEnter()
-        {
-            OutputData = ParamTextBox.Text;
         }
     }
 }

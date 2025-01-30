@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using Executioner.UserInputParameters;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Executioner.InputWindows
@@ -10,16 +12,40 @@ namespace Executioner.InputWindows
     {
         private bool isClosing = false;
 
+        public string InputLabel { get; set; } = "";
+
+        public abstract Control FocusControl { get; }
+        public abstract string OutputValue { get; }
+
         static BaseParameterInputWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(BaseParameterInputWindow), new FrameworkPropertyMetadata(typeof(BaseParameterInputWindow)));
         }
 
-        public BaseParameterInputWindow()
+        public BaseParameterInputWindow(IBaseUserInputParameter param)
         {
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             Deactivated += BaseParameterInputWindow_Deactivated;
             KeyDown += BaseParameterInputWindow_KeyDown;
+
+            DataContext = this;
+
+            InputLabel = param.Name;
+
+            ContentRendered += BaseParameterInputWindow_ContentRendered;
+
+        }
+
+        /// <summary>
+        /// Handler for the ContentRendered-event of the window.
+        /// Sets the initial focus on the main control-element.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BaseParameterInputWindow_ContentRendered(object? sender, EventArgs e)
+        {
+            FocusControl.Focus();
+            ContentRendered -= BaseParameterInputWindow_ContentRendered;
         }
 
         /// <summary>
@@ -73,6 +99,10 @@ namespace Executioner.InputWindows
         /// <summary>
         /// Handler that triggers in case the user confirms the input using the ENTER key.
         /// </summary>
-        protected abstract void HandleEnter();
+        /// <returns>True if everything is fine and the dialog can be confirmed, otherwise false.</returns>
+        protected virtual bool HandleEnter()
+        {
+            return true;
+        }
     }
 }

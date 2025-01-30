@@ -95,25 +95,34 @@ namespace Executioner
         /// <exception cref="ArgumentException">User cancel</exception>
         private static string ExecuteParameter(IBaseUserInputParameter param)
         {
+            BaseParameterInputWindow? paramWindow = null;
             switch (param.Type)
             {
                 case ParameterType.Text:
                     {
-                        TextParameterInputWindow paramWindow = new(param);
-                        if (paramWindow.ShowDialog() != true)
-                            throw new ArgumentException("User cancel");
-
-                        return paramWindow.OutputData;
+                        paramWindow = new TextParameterInputWindow(param);
+                        break;
                     }
-                default:
+                case ParameterType.Number:
                     {
-                        InputParameterWindow paramWindow = new(param);
-                        if (paramWindow.ShowDialog() != true)
-                            throw new ArgumentException($"User cancel");
-
-                        return paramWindow.OutputData!;
+                        paramWindow = new NumberParameterInputWindow(param);
+                        break;
                     }
             }
+
+            if (paramWindow != null)
+            {
+                if (paramWindow.ShowDialog() != true)
+                    throw new ArgumentException("User cancel");
+
+                return paramWindow.OutputValue;
+            }
+
+            InputParameterWindow miscParamWindow = new(param);
+            if (miscParamWindow.ShowDialog() != true)
+                throw new ArgumentException($"User cancel");
+
+            return miscParamWindow.OutputData!;
         }
 
         /// <summary>
