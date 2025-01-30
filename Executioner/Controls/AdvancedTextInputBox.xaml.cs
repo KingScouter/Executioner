@@ -79,7 +79,15 @@ namespace Executioner.Controls
             Loaded += AdvancedTextInputBox_Loaded;
         }
 
-        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void AdvancedTextInputBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            bool isValid = IsTextAllowed(((AdvancedTextInputBox)sender).Text);
+            if (isValid)
+                Foreground = defaultForeground;
+            else
+                Foreground = Brushes.Red;
+        }
+
         private void AdvancedTextInputBox_Loaded(object sender, RoutedEventArgs e)
         {
             Mode = AdvancedTextInputBox.GetMode(this);
