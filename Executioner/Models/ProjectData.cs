@@ -16,9 +16,9 @@
             return Commands.Find(elem => elem.UUID == uuid);
         }
 
-        public CommandData? GetCommandByName(string name)
+        public CommandData? GetCommandByKeyword(string name)
         {
-            return Commands.Find(elem => elem.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return Commands.Find(elem => elem.Keyword.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool UpdateCommand(CommandData command)

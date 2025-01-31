@@ -10,7 +10,7 @@ namespace Executioner
         public string ProjectFile { get; set; } = "";
 
         [Option('c', "cmd", Required = false, HelpText = "Command to execute")]
-        public string CommandName { get; set; } = "";
+        public string CommandKeyword { get; set; } = "";
 
         [Option('a', "args", Required = false, HelpText = "Arguments for the command execution")]
         public IEnumerable<string> AdditionalArguments { get; set; } = [];
@@ -38,7 +38,7 @@ namespace Executioner
         {
             try
             {
-                if (opts.CommandName == "" || opts.ProjectFile == "")
+                if (opts.CommandKeyword == "" || opts.ProjectFile == "")
                 {
                     MainWindow wnd = new(opts.ProjectFile);
                     wnd.Show();
@@ -52,7 +52,7 @@ namespace Executioner
                     additionalArgs.AddRange(opts.Misc);
 
                 ShutdownMode = ShutdownMode.OnExplicitShutdown;
-                ProjectManager manager = new(opts.ProjectFile, opts.CommandName, additionalArgs, opts.DryRun);
+                ProjectManager manager = new(opts.ProjectFile, opts.CommandKeyword, additionalArgs, opts.DryRun);
             }
             catch (Exception ex)
             {

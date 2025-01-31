@@ -25,15 +25,15 @@ namespace Executioner.Models
             }
         }
 
-        public ProjectManager(string filename, string commandName, List<string> additionalArguments, bool dryRun)
+        public ProjectManager(string filename, string keyword, List<string> additionalArguments, bool dryRun)
         {
             LoadProject(filename);
             if (project == null)
                 throw new ArgumentException($"Project {filename} could not be loaded!");
 
-            CommandData? command = project.GetCommandByName(commandName);
+            CommandData? command = project.GetCommandByKeyword(keyword);
             if (command == null)
-                throw new ArgumentException($"Command {commandName} could not be found!");
+                throw new ArgumentException($"Command with keyword {keyword} could not be found!");
 
             CommandExecutor.ExecuteCommand(command, additionalArguments, dryRun);
         }
@@ -70,9 +70,9 @@ namespace Executioner.Models
             return project.GetCommand(uuid);
         }
 
-        public CommandData? GetCommandByName(string name)
+        public CommandData? GetCommandByKeyword(string name)
         {
-            return project.GetCommandByName(name);
+            return project.GetCommandByKeyword(name);
         }
 
         public bool UpdateCommand(CommandData command)
