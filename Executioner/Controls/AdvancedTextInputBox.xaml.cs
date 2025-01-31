@@ -17,7 +17,7 @@ namespace Executioner.Controls
     /// <summary>
     /// Interaction logic for AdvancedTextInputBox.xaml
     /// </summary>
-    public partial class AdvancedTextInputBox : StackPanel
+    public partial class AdvancedTextInputBox : Grid
     {
         public static readonly DependencyProperty ModeProperty =
         DependencyProperty.RegisterAttached("Mode", typeof(TextInputBoxMode), typeof(AdvancedTextInputBox), new PropertyMetadata(default(TextInputBoxMode)));
@@ -41,6 +41,7 @@ namespace Executioner.Controls
             {
                 InputTextBox.FontSize = value;
                 PrefixLabel.FontSize = value;
+                InputTextBox.Padding = new Thickness(0, 0, value, 0);
             } 
         }
         public int MaxLines { get => InputTextBox.MaxLines; set => InputTextBox.MaxLines = value; }
@@ -144,6 +145,7 @@ namespace Executioner.Controls
         private void AdvancedTextInputBox_Loaded(object sender, RoutedEventArgs e)
         {
             Mode = AdvancedTextInputBox.GetMode(this);
+            FontSize = InputTextBox.FontSize;
             InputTextBox.Loaded -= AdvancedTextInputBox_Loaded;
         }
 
