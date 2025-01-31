@@ -108,6 +108,11 @@ namespace Executioner
                         paramWindow = new NumberParameterInputWindow(param);
                         break;
                     }
+                case ParameterType.Checkbox:
+                    {
+                        paramWindow = new CheckboxParameterInputWindow(param);
+                        break;
+                    }
             }
 
             if (paramWindow != null)
