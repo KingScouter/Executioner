@@ -43,6 +43,7 @@ namespace Executioner
             DescInputTextBox.Text = inputData.Description;
             TemplateInputTextBox.Text = inputData.Template;
             WaitForResultCheckBox.IsChecked = inputData.WaitForResult;
+            RunAsAdminCheckBox.IsChecked = inputData.RunAsAdmin;
             WorkingDirTextBox.Text = inputData.WorkingDir;
             selectedType = inputData.Type;
 
@@ -78,7 +79,7 @@ namespace Executioner
                 ShellType type = (ShellType)TypeComboBox.SelectedIndex;
 
                 return new CommandData(uuid, KeywordInputTextBox.Text, NameInputTextBox.Text, DescInputTextBox.Text,
-                    TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, WorkingDirTextBox.Text,
+                    TemplateInputTextBox.Text, WaitForResultCheckBox.IsChecked == true, WorkingDirTextBox.Text, RunAsAdminCheckBox.IsChecked == true,
                     type, ParameterGrid.Parameters);
             } 
         }

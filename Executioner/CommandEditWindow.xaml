@@ -31,6 +31,7 @@
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
+                <RowDefinition />
                 <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Target="{Binding ElementName=KeywordInputTextBox}">Keyword:</Label>
@@ -48,18 +49,21 @@
             <Label Grid.Row="4" Grid.Column="0" Target="{Binding ElementName=WaitForResultCheckBox}" VerticalAlignment="Center">Wait for result:</Label>
             <CheckBox x:Name="WaitForResultCheckBox" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{StaticResource GridMargin}"></CheckBox>
 
-            <Label Grid.Row="5" Grid.Column="0" Target="{Binding ElementName=WorkingDirTextBox}" VerticalAlignment="Center">Working Directory:</Label>
-            <controls:FileChooserEdit x:Name="WorkingDirTextBox" Grid.Row="5" Grid.Column="1" Style="{StaticResource GridMargin}"/>
+            <Label Grid.Row="5" Grid.Column="0" Target="{Binding ElementName=RunAsAdminCheckBox}" VerticalAlignment="Center">Run as admin:</Label>
+            <CheckBox x:Name="RunAsAdminCheckBox" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{StaticResource GridMargin}"></CheckBox>
 
-            <Label Grid.Row="6" Grid.Column="0" Target="{Binding ElementName=TypeComboBox}">Type:</Label>
-            <ComboBox x:Name="TypeComboBox" Grid.Row="6" Grid.Column="1" Style="{StaticResource GridMargin}"
+            <Label Grid.Row="6" Grid.Column="0" Target="{Binding ElementName=WorkingDirTextBox}" VerticalAlignment="Center">Working Directory:</Label>
+            <controls:FileChooserEdit x:Name="WorkingDirTextBox" Grid.Row="6" Grid.Column="1" Style="{StaticResource GridMargin}"/>
+
+            <Label Grid.Row="7" Grid.Column="0" Target="{Binding ElementName=TypeComboBox}">Type:</Label>
+            <ComboBox x:Name="TypeComboBox" Grid.Row="7" Grid.Column="1" Style="{StaticResource GridMargin}"
                           VerticalAlignment="Center" 
                           ItemsSource="{Binding NameMapping}"
                           DisplayMemberPath="Value"
                           SelectedValuePath="Key"
                           SelectedValue="{Binding SelectedTypeProperty, Mode=TwoWay}" />
 
-            <controls:UserInputParameterGrid x:Name="ParameterGrid" Grid.Row="7" Grid.ColumnSpan="2" Style="{StaticResource GridMargin}" 
+            <controls:UserInputParameterGrid x:Name="ParameterGrid" Grid.Row="8" Grid.ColumnSpan="2" Style="{StaticResource GridMargin}" 
                                              MinHeight="150" InsertParamKeyword="ParameterGrid_InsertParamKeyword" />
 
         </Grid>

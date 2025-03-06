@@ -142,13 +142,13 @@ namespace Executioner
                 switch (data.Type)
                 {
                     case ShellType.Cmd:
-                        ExecuteCmdCommand(parsedCommand, data.WaitForResult, data.WorkingDir);
+                        ExecuteCmdCommand(parsedCommand, data.WaitForResult, data.WorkingDir, data.RunAsAdmin);
                         break;
                     case ShellType.WindowsPowershell:
-                        ExecuteWindowsPowershellCommand(parsedCommand, data.WaitForResult, data.WorkingDir);
+                        ExecuteWindowsPowershellCommand(parsedCommand, data.WaitForResult, data.WorkingDir, data.RunAsAdmin);
                         break;
                     case ShellType.Powershell:
-                        ExecutePowershellCommand(parsedCommand, data.WaitForResult, data.WorkingDir);
+                        ExecutePowershellCommand(parsedCommand, data.WaitForResult, data.WorkingDir, data.RunAsAdmin);
                         break;
                 }
             }
@@ -164,7 +164,8 @@ namespace Executioner
         /// <param name="commandTemplate">Command template</param>
         /// <param name="waitForResult">Flag to determine if the CLI should remain open after the execution finished</param>
         /// <param name="workingDir">Working directory</param>
-        private static void ExecuteCmdCommand(string commandTemplate, Boolean waitForResult, string workingDir)
+        /// <param name="runAsAdmin">Flag to check if the process should be started with admin privileges</param>
+        private static void ExecuteCmdCommand(string commandTemplate, bool waitForResult, string workingDir, bool runAsAdmin)
         {
             System.Diagnostics.ProcessStartInfo startInfo = new()
             {
@@ -179,7 +180,7 @@ namespace Executioner
 
             startInfo.Arguments = $"/C {commandTemplate}";
 
-            ExecuteProcess(startInfo);
+            ExecuteProcess(startInfo, runAsAdmin);
         }
 
         /// <summary>
@@ -188,7 +189,8 @@ namespace Executioner
         /// <param name="commandTemplate">Command template</param>
         /// <param name="waitForResult">Flag to determine if the CLI should remain open after the execution finished</param>
         /// <param name="workingDir">Working directory</param>
-        private static void ExecuteWindowsPowershellCommand(string commandTemplate, bool waitForResult, string workingDir)
+        /// <param name="runAsAdmin">Flag to check if the process should be started with admin privileges</param>
+        private static void ExecuteWindowsPowershellCommand(string commandTemplate, bool waitForResult, string workingDir, bool runAsAdmin)
         {
             System.Diagnostics.ProcessStartInfo startInfo = new()
             {
@@ -204,7 +206,7 @@ namespace Executioner
             startInfo.Arguments = $"-ExecutionPolicy Bypass \"{commandTemplate}\"";
             startInfo.UseShellExecute = false;
 
-            ExecuteProcess(startInfo);
+            ExecuteProcess(startInfo, runAsAdmin);
         }
 
         /// <summary>
@@ -213,7 +215,8 @@ namespace Executioner
         /// <param name="commandTemplate">Command template</param>
         /// <param name="waitForResult">Flag to determine if the CLI should remain open after the execution finished</param>
         /// <param name="workingDir">Working directory</param>
-        private static void ExecutePowershellCommand(string commandTemplate, bool waitForResult, string workingDir)
+        /// <param name="runAsAdmin">Flag to check if the process should be started with admin privileges</param>
+        private static void ExecutePowershellCommand(string commandTemplate, bool waitForResult, string workingDir, bool runAsAdmin)
         {
             System.Diagnostics.ProcessStartInfo startInfo = new()
             {
@@ -229,16 +232,24 @@ namespace Executioner
             startInfo.Arguments = $"-ExecutionPolicy Bypass -command \"{commandTemplate}\"";
             startInfo.UseShellExecute = false;
 
-            ExecuteProcess(startInfo);
+            ExecuteProcess(startInfo, runAsAdmin);
         }
 
         /// <summary>
         /// Internal method to startup and execute a process for the command
         /// </summary>
         /// <param name="startInfo">Process info for startup</param>
-        private static void ExecuteProcess(System.Diagnostics.ProcessStartInfo startInfo)
+        /// <param name="runAsAdmin">Flag to check if the process should be started with admin privileges</param>
+        private static void ExecuteProcess(System.Diagnostics.ProcessStartInfo startInfo, bool runAsAdmin = false)
         {
             System.Diagnostics.Process process = new System.Diagnostics.Process();
+
+            if (runAsAdmin)
+            {
+                startInfo.Verb = "runas";
+                startInfo.UseShellExecute = true;
+            }
+
             process.StartInfo = startInfo;
             process.Start();
         }

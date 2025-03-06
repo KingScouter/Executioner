@@ -20,6 +20,7 @@ namespace Executioner.Models
             }
         }
         public bool WaitForResult { get; set; }
+        public bool RunAsAdmin { get; set; }
         public string WorkingDir { get; set; }
         public ShellType Type { get; set; }
         public Dictionary<string, IBaseUserInputParameter> Parameters { get; set; } = [];
@@ -36,7 +37,7 @@ namespace Executioner.Models
         private CommandTemplate commandTemplate = new("");
 
         public CommandData(string uuid, string keyword, string name, string description, string template,
-            bool waitForResult, string workingDir, ShellType type,
+            bool waitForResult, string workingDir, bool runAsAdmin, ShellType type,
             Dictionary<string, IBaseUserInputParameter> parameters)
         {
             UUID = uuid;
@@ -46,6 +47,7 @@ namespace Executioner.Models
             Template = template; ;
             WaitForResult = waitForResult;
             WorkingDir = workingDir;
+            RunAsAdmin = runAsAdmin;
             Type = type;
             Parameters = parameters;
         }
