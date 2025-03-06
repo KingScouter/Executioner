@@ -1,17 +1,6 @@
 ﻿using Executioner.UserInputParameters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Executioner.InputWindows
 {
@@ -25,6 +14,21 @@ namespace Executioner.InputWindows
         public CheckboxParameterInputWindow(IBaseUserInputParameter param) : base(param)
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// PreviewKeyDown handler. Catches the ENTER-key to prevent it from toggling the
+        /// button and instead close the window.
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Event data</param>
+        private void CheckboxParameterInputWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                BaseParameterInputWindow_KeyDown(sender, e);
+                return;
+            }
         }
     }
 }
